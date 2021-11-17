@@ -1,5 +1,6 @@
-package com.challenge.ml.init;
+package com.challenge.ml;
 
+import com.challenge.ml.security.ChallengeAuthorizationFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
@@ -9,15 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.challenge.ml.dao.BookDAO;
-import com.challenge.ml.entity.Book;
-import com.challenge.ml.security.ChallengeAuthorizationFilter;
-
-
 
 @SpringBootApplication
 public class DemoApplication {
-	BookDAO bookDAO;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
@@ -31,11 +26,10 @@ public class DemoApplication {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable()
-				.addFilterAfter(new ChallengeAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests()
-				.antMatchers(HttpMethod.POST, "/users").permitAll()
-				.anyRequest().authenticated();
+					.addFilterAfter(new ChallengeAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+					.authorizeRequests()
+					.antMatchers(HttpMethod.POST, "/users").permitAll()
+					.anyRequest().authenticated();
 		}
 	}
-	
 }

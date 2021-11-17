@@ -3,8 +3,8 @@ package com.challenge.ml.bsn;
 import javax.transaction.Transactional;
 
 import org.jvnet.hk2.annotations.Service;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.dozer.Mapper;
 import com.challenge.ml.beans.UsersVO;
 import com.challenge.ml.dao.UsersDAO;
 import com.challenge.ml.entity.Users;
@@ -15,9 +15,8 @@ public class EnrolamientoBsnImpl implements EnrolamientoBsn {
 	
 	@Autowired
 	UsersDAO usersDAO;
-	
-	@Autowired
-	Mapper mapper;
+
+	final private ModelMapper mapper = new ModelMapper();
 	
 	public UsersVO saveUser(UsersVO newUser) {
 		Users users=mapper.map(newUser,Users.class);

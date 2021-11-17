@@ -1,10 +1,11 @@
 package com.challenge.ml.entity;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Table(name = "users")
@@ -13,7 +14,7 @@ public class Users extends BaseEntity<Integer>{
 	 * 
 	 */
 	private static final long serialVersionUID = -646452113163799350L;
-	
+
 	@Id
 	private int idUsers;
 	
@@ -21,7 +22,6 @@ public class Users extends BaseEntity<Integer>{
 	private String password;
 
 
-	
 	public int getIdUsers() {
 		return idUsers;
 	}

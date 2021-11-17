@@ -1,19 +1,16 @@
 package com.challenge.ml.controller;
 
-import org.apache.logging.log4j.Logger;
+import com.challenge.ml.beans.BookVO;
+import com.challenge.ml.dao.AddressRepository;
+import com.challenge.ml.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.challenge.ml.beans.BookVO;
-import com.challenge.ml.dao.BookDAO;
-import com.challenge.ml.entity.Book;
 
 @RestController
 public class UsersController {
 	@Autowired
-	BookDAO bookDAO;
+	AddressRepository bookDAO;
 	
 	@PostMapping("users")
 	public Book addbook() {
@@ -24,7 +21,7 @@ public class UsersController {
 		book.setIdGoogle("73427GR67");
 		book.setPublisher("Trillas");
 		BookVO bookVO=com.challenge.ml.mapper.Mapper.toVO(bookDAO.save(book));
-		book=bookDAO.find(bookVO.getIdBook());
+		book=bookDAO.getById(bookVO.getIdBook());
 		
 		return book;
 		
