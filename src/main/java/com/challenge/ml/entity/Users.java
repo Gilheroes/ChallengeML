@@ -34,6 +34,10 @@ public class Users extends BaseEntity<Integer>{
 	private String user_name;
 	@Column(name = "password", unique = true, nullable = false)
 	private String password;
+	@Override
+	public String toString() {
+		return "Users [idUsers=" + idUsers + ", user_name=" + user_name + ", password=" + password + "]";
+	}
 	
 	
 

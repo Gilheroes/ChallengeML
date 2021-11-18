@@ -2,16 +2,17 @@ package com.challenge.ml.beans;
 
 public class UsersVO {
 
-	private int idUsers;
+	private int id_users;
 	private String user_name;
 	private String password;
 	
 	
-	public int getIdUsers() {
-		return idUsers;
+	
+	public int getId_users() {
+		return id_users;
 	}
-	public void setIdUsers(int idUsers) {
-		this.idUsers = idUsers;
+	public void setId_users(int id_users) {
+		this.id_users = id_users;
 	}
 	public String getUser_name() {
 		return user_name;
@@ -25,6 +26,12 @@ public class UsersVO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	@Override
+	public String toString() {
+		return "UsersVO [idUsers=" + id_users + ", user_name=" + user_name + ", password=" + password + "]";
+	}
+	
+	
 
 	
 

@@ -9,7 +9,9 @@ import com.challenge.ml.status.usersStatus;
 
 import java.util.List;
 
+import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,18 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsersController {
 	@Autowired
 	UsersRepository usersDAO;
+	final private ModelMapper mapper = new ModelMapper();
 	
 	@PostMapping("users/register")
-	public usersStatus newUser(@RequestBody Users newUser) {
+	public usersStatus newUser(@Valid @RequestBody UsersVO newUser) {
 		System.out.println("Entra:"+newUser.toString());
-		
-		List<Users>users=usersDAO.findAll();
-		System.out.println("Nuevo usuario: "+newUser);
-		for(Users user:users) {
-			if(user.equals(newUser))
+		Users users=mapper.map(newUser, Users.class);
+		List<Users>usersList=usersDAO.findAll();
+		for(Users user:usersList) {
+			if(user.equals(users))
 				return usersStatus.USER_ALREADY_EXIST;
 		}
-		usersDAO.save(newUser);
+		usersDAO.save(users);
 		return usersStatus.SUCCESS;
 	}
 
