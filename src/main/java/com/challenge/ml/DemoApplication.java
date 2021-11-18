@@ -30,10 +30,15 @@ public class DemoApplication {
 			http.csrf().disable()
 					.addFilterAfter(new ChallengeAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/users/register").permitAll()
+					.antMatchers(HttpMethod.POST, "/users/register","/users/login/token").permitAll()
 					.anyRequest().authenticated();
+			
+			
 		}
 	}
+	
+	
+	
 
 	@Bean
 	public ModelMapper modelMapper() {

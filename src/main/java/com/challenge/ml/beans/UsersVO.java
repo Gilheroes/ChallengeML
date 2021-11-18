@@ -1,8 +1,9 @@
 package com.challenge.ml.beans;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor
@@ -13,10 +14,6 @@ public class UsersVO {
 	private String user_name;
 	private String password;
 
-	@Override
-	public String toString() {
-		return "UsersVO [idUsers=" + id_users + ", user_name=" + user_name + ", password=" + password + "]";
-	}
 	
 	
 
