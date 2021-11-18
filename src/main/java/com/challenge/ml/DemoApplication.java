@@ -1,8 +1,10 @@
 package com.challenge.ml;
 
 import com.challenge.ml.security.ChallengeAuthorizationFilter;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,5 +33,10 @@ public class DemoApplication {
 					.antMatchers(HttpMethod.POST, "/users/register").permitAll()
 					.anyRequest().authenticated();
 		}
+	}
+
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 }

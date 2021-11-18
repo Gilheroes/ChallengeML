@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsersController {
 	@Autowired
 	UsersRepository usersDAO;
-	final private ModelMapper mapper = new ModelMapper();
+
+	@Autowired
+	private ModelMapper mapper;
 	
 	@PostMapping("users/register")
 	public usersStatus newUser(@Valid @RequestBody UsersVO newUser) {
@@ -29,7 +31,7 @@ public class UsersController {
 		Users users=mapper.map(newUser, Users.class);
 		List<Users>usersList=usersDAO.findAll();
 		for(Users user:usersList) {
-			if(user.equals(users))
+			if(user.getUser_name().equals(users.getUser_name()))
 				return usersStatus.USER_ALREADY_EXIST;
 		}
 		usersDAO.save(users);
