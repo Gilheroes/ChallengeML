@@ -1,30 +1,37 @@
 package com.challenge.ml.controller;
 
-import com.challenge.ml.beans.BookVO;
+import com.challenge.ml.beans.UsersVO;
 import com.challenge.ml.dao.AddressRepository;
+import com.challenge.ml.dao.UsersRepository;
 import com.challenge.ml.entity.Book;
+import com.challenge.ml.entity.Users;
+import com.challenge.ml.status.usersStatus;
+
+import java.util.List;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UsersController {
 	@Autowired
-	AddressRepository bookDAO;
+	UsersRepository usersDAO;
 	
-	@PostMapping("users")
-	public Book addbook() {
-		System.out.println("Entra");
-		Book book=new Book();
-		book.setAuthor("J. K. Rowling");
-		book.setTitle("Harry Potter");
-		book.setIdGoogle("73427GR67");
-		book.setPublisher("Trillas");
-		BookVO bookVO=com.challenge.ml.mapper.Mapper.toVO(bookDAO.save(book));
-		book=bookDAO.getById(bookVO.getIdBook());
+	@PostMapping("users/register")
+	public usersStatus newUser(@RequestBody Users newUser) {
+		System.out.println("Entra:"+newUser.toString());
 		
-		return book;
-		
+		List<Users>users=usersDAO.findAll();
+		System.out.println("Nuevo usuario: "+newUser);
+		for(Users user:users) {
+			if(user.equals(newUser))
+				return usersStatus.USER_ALREADY_EXIST;
+		}
+		usersDAO.save(newUser);
+		return usersStatus.SUCCESS;
 	}
 
 }

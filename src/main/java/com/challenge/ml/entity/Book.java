@@ -16,16 +16,12 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Table(name = "book")
 public class Book{
-	/**
-	 * Serial Version UID.
-	 */
-	private static final long serialVersionUID = -4699144633153857016L;
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idBook", unique = true, nullable = false)
+    @Column(name = "id_Book", unique = true, nullable = false)
     private Integer idBook;
 
-	@Column(name = "idGoogle", nullable = false)
+	@Column(name = "id_Google", nullable = false)
     private String idGoogle;
 
 	@Column(name = "author", nullable = false)

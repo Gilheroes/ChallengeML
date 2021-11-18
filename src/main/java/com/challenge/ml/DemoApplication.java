@@ -28,7 +28,7 @@ public class DemoApplication {
 			http.csrf().disable()
 					.addFilterAfter(new ChallengeAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/users").permitAll()
+					.antMatchers(HttpMethod.POST, "/users/register").permitAll()
 					.anyRequest().authenticated();
 		}
 	}

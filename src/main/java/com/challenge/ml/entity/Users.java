@@ -3,11 +3,22 @@ package com.challenge.ml.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+
+@Getter
+@Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "users")
 public class Users extends BaseEntity<Integer>{
 	/**
@@ -16,33 +27,13 @@ public class Users extends BaseEntity<Integer>{
 	private static final long serialVersionUID = -646452113163799350L;
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_users", unique = true, nullable = false)
 	private int idUsers;
-	
+	@Column(name = "user_name", unique = true, nullable = false)
 	private String user_name;
+	@Column(name = "password", unique = true, nullable = false)
 	private String password;
-
-
-	public int getIdUsers() {
-		return idUsers;
-	}
-	public void setIdUsers(int idUsers) {
-		this.idUsers = idUsers;
-	}
-	public String getUser_name() {
-		return user_name;
-	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	
-	
 	
 	
 

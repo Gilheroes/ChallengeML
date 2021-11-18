@@ -18,11 +18,14 @@ public class BookBsnImpl implements BookBsn {
 
 	final private ModelMapper mapper = new ModelMapper();
 	
-	public BookVO addBook(BookVO newBook) {
+	public boolean addBook(BookVO newBook) {
 		Book book=mapper.map(newBook, Book.class);
+		try {
 		book=bookDAO.save(book);
-		BookVO bookVO=com.challenge.ml.mapper.Mapper.toVO(book);
-		return bookVO;
+		return true;
+		}catch (Exception e) {
+			return false;
+		}
 	}
 
 }

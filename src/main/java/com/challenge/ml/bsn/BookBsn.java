@@ -4,6 +4,6 @@ import com.challenge.ml.beans.BookVO;
 
 public interface BookBsn {
 	
-	BookVO addBook(BookVO newBook);
+	boolean addBook(BookVO newBook);
 
 }
