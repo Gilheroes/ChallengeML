@@ -1,6 +1,7 @@
 package com.challenge.ml.controller;
 
 import com.challenge.ml.beans.UsersVO;
+import com.challenge.ml.bsn.EnrolamientoBsn;
 import com.challenge.ml.dao.UsersRepository;
 import com.challenge.ml.entity.Users;
 
@@ -32,6 +33,9 @@ public class UsersController {
 	@Autowired
 	private ModelMapper mapper;
 	
+	 @Autowired
+	 EnrolamientoBsn enrolamientoBsn;
+	
 	@PostMapping("users/register")
 	ResponseEntity<String> newUser(@Valid @RequestBody UsersVO newUser) {
 		System.out.println("Entra:"+newUser.toString());
@@ -56,7 +60,7 @@ public class UsersController {
 			users=usersDAO.findByUserAndPwd(usersVO.getUser_name(), usersVO.getPassword());
 			usersVO=mapper.map(users, UsersVO.class);
 			if(usersVO!=null) {
-				String token = getJWTToken(usersVO.getUser_name());
+				String token = enrolamientoBsn.getJWTToken(usersVO.getUser_name());
 				return ResponseEntity.status(HttpStatus.ACCEPTED).body(token);
 			}
 		}catch (Exception e) {
@@ -65,25 +69,6 @@ public class UsersController {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario o contrasenia no validos");
 	}
 	
-	private String getJWTToken(String username) {
-		String secretKey = "llaveSecreta";
-		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-				.commaSeparatedStringToAuthorityList("ROLE_USER");
-		
-		String token = Jwts
-				.builder()
-				.setId("jwtChallenge")
-				.setSubject(username)
-				.claim("authorities",
-						grantedAuthorities.stream()
-								.map(GrantedAuthority::getAuthority)
-								.collect(Collectors.toList()))
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 600000))
-				.signWith(SignatureAlgorithm.HS512,
-						secretKey.getBytes()).compact();
 
-		return "Bearer " + token;
-	}
 
 }
