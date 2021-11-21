@@ -1,7 +1,5 @@
 package com.challenge.ml.api.books.model;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -14,6 +12,6 @@ public class VolumeInfoWrapper {
 	private String title;
 	private String publisher;
 	private String[] authors;
-	private Map<String, String> imageLinks = new HashMap<String, String>();
+
 
 }

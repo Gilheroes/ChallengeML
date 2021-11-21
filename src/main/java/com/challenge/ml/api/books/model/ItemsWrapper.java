@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class ItemsWrapper {
+	private String id;
 	private VolumeInfoWrapper volumeInfo;
 
 }

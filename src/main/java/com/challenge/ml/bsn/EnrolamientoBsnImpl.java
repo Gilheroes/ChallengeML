@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,7 +18,7 @@ public class EnrolamientoBsnImpl implements EnrolamientoBsn {
 
 	@Override
 	public String getJWTToken(String userName) {
-		String secretKey = "llaveSecreta";
+		String secretKey = "mySecretKey";
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
 				.commaSeparatedStringToAuthorityList("ROLE_USER");
 		
