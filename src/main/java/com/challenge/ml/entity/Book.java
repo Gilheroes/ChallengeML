@@ -20,7 +20,7 @@ public class Book{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_Book", unique = true, nullable = false)
     private Integer idBook;
-
+	
 	@Column(name = "id_Google", nullable = false)
     private String idGoogle;
 

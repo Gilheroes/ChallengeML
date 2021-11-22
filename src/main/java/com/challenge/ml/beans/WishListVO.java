@@ -1,37 +1,25 @@
 package com.challenge.ml.beans;
 
+import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class WishListVO {
 
 	private int idWishList;
-	private BookVO bookVO;
-	private UsersVO userVO;
-
-	public int getIdWishList() {
-		return idWishList;
+	private List<BookVO> listBooks;
+	private int idUser;
+	@Override
+	public String toString() {
+		return "WishListVO [idWishList=" + idWishList  +  ", listBooks="
+				+ listBooks + "]";
 	}
 
-	public void setIdWishList(int idWishList) {
-		this.idWishList = idWishList;
-	}
-
-	public BookVO getBookVO() {
-		return bookVO;
-	}
-
-	public void setBookVO(BookVO bookVO) {
-		this.bookVO = bookVO;
-	}
-
-	public UsersVO getUserVO() {
-		return userVO;
-	}
-
-	public void setUserVO(UsersVO userVO) {
-		this.userVO = userVO;
-	}
-
-	
 	
 	
 	

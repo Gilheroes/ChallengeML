@@ -1,11 +1,16 @@
 package com.challenge.ml.entity;
 
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -30,12 +35,12 @@ public class Wishlist extends BaseEntity<Integer>{
     @Column(name = "id_Wish_list", unique = true, nullable = false)
 	private int idWishList;
 	
-	public int getIdWishList() {
-		return idWishList;
-	}
-	public void setIdWishList(int idWishList) {
-		this.idWishList = idWishList;
-	}
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_Book")
+	private List<Book> listOfBooks;
+	
+	@Column(name="idUser",nullable = false)
+	private int idUser;
 
 
 }

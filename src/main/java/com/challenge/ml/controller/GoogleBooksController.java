@@ -20,7 +20,6 @@ public class GoogleBooksController {
     @PostMapping("/findBooks")
     ResponseEntity<Wrapper> getBooks(@RequestBody GoogleBooksVO googleBooksVO) {
         System.out.println(googleBooksVO.toString());
-        //GoogleBooksVO result=googleBooksBsn.getBooks(googleBooksVO);
         RestTemplate restTemplate = new RestTemplate();
         System.out.println("Entra books");
         ResponseEntity<Wrapper> response = restTemplate.getForEntity(url + googleBooksVO.getTitle(), Wrapper.class);

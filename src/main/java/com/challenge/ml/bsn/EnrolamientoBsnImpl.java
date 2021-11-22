@@ -5,9 +5,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
+
+import com.challenge.ml.beans.UsersVO;
+import com.challenge.ml.dao.UsersRepository;
+import com.challenge.ml.entity.Users;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,7 +26,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class EnrolamientoBsnImpl implements EnrolamientoBsn {
-
+@Autowired
+UsersRepository usersRepository;
+@Autowired
+private ModelMapper mapper;
+	
+	
 	@Override
 	public String getJWTToken(String userName) {
 		String secretKey = "mySecretKey";
@@ -37,6 +53,45 @@ public class EnrolamientoBsnImpl implements EnrolamientoBsn {
 
 		return "Bearer " + token;
 	}
+	
+	@Override
+	public UsersVO saveNewUser(UsersVO newUser) {
+		Users users = mapper.map(newUser, Users.class);
+		UsersVO result=mapper.map(usersRepository.save(users),UsersVO.class);
+		return result;
+	}
+
+	@Override
+	public boolean validateUser(UsersVO userVO) {
+		try {
+			Users userEntity=mapper.map(userVO, Users.class);
+			List<Users> usersList = usersRepository.findAll();
+			for (Users user : usersList) {
+				if (user.getUser_name().equals(userEntity.getUser_name()))
+					return false;
+			}
+					return true;
+			} catch (Exception e) {
+				return false;
+			}
+	}
+
+	@Override
+	public UsersVO findByUserAndPwd(UsersVO usersVO, HttpSession httpSession) {
+    	try {
+			Users users = mapper.map(usersVO, Users.class);
+			users = usersRepository.findByUserAndPwd(usersVO.getUser_name(), usersVO.getPassword());
+			System.out.println(users.getIdUsers());
+			usersVO = mapper.map(users, UsersVO.class);
+			System.out.println("id: "+users.getIdUsers());
+			httpSession.setAttribute("id",users.getIdUsers());
+			return usersVO;
+    	}catch (Exception e) {
+    		return null;
+    	}
+	}
+
+
 
 	
 
