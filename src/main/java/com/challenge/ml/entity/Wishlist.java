@@ -42,15 +42,11 @@ public class Wishlist extends BaseEntity<Integer>{
     @Column(name = "id_Wish_list", unique = true, nullable = false)
 	private int idWishList;
 	
-	@JoinColumn(name = "id_Book")
-	@OneToMany(targetEntity=Book.class,orphanRemoval=true)
-	@JsonIgnore
-	@NotNull
+    @OneToMany(targetEntity=Book.class,mappedBy="wishlist",orphanRemoval=true)
 	private List<Book> book;
 	
 	@Column(name="id_user",nullable = false)
 	private int idUser;
-
 
 	@Override
 	public String toString() {

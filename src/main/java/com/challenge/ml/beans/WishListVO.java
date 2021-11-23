@@ -1,5 +1,6 @@
 package com.challenge.ml.beans;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.challenge.ml.entity.Book;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class WishListVO {
 
 	private int idWishList;
-	private List<BookVO> book;
+	private List<BookVO> book= new ArrayList<>();
 	private int idUser;
 	@Override
 	public String toString() {

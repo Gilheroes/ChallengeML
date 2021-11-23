@@ -2,11 +2,14 @@ package com.challenge.ml.bsn;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpSession;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,17 +32,22 @@ public class WishListBsnImpl implements WishLisBsn{
 	UsersRepository usersRepository;
 	@Autowired
 	private ModelMapper mapper;
+	@Autowired
+	EntityManager em;
+	@Autowired
+	EntityManagerFactory emf;
 
 	@Override
-	public void saveNewWishList(@RequestBody List<BookVO> bookVO,HttpSession session) {
+	public void saveNewWishList(@RequestBody BookVO bookVO,HttpSession session) {
+		em=EntityManagerFactoryUtils.getTransactionalEntityManager(emf);
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		WishListVO wishListVO=new WishListVO();
 		Users users=usersRepository.getById((int)session.getAttribute("id"));
 		wishListVO.setIdUser(users.getIdUsers());
-		wishListVO.setBook(bookVO);
+		wishListVO.getBook().add(bookVO);
 		Wishlist newWishlist=mapper.map(wishListVO, Wishlist.class);
 		System.out.println(newWishlist.toString());
-		wishListRepository.save(newWishlist);
+		em.persist(newWishlist);
 	}
 
 }
