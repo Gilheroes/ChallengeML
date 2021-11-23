@@ -14,7 +14,7 @@ public class BookVO {
 	private String author;
 	private String title;
 	private String publisher;
-	
+	private WishListVO wishListVO;
 	
 	@Override
 	public String toString() {

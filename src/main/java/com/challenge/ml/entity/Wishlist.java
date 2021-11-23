@@ -14,10 +14,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
@@ -37,17 +42,26 @@ public class Wishlist extends BaseEntity<Integer>{
     @Column(name = "id_Wish_list", unique = true, nullable = false)
 	private int idWishList;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idBook")
-	private Book book;
+	@JoinColumn(name = "id_Book")
+	@OneToMany(targetEntity=Book.class,orphanRemoval=true)
+	@JsonIgnore
+	@NotNull
+	private List<Book> book;
 	
-	@Column(name="idUser",nullable = false)
+	@Column(name="id_user",nullable = false)
 	private int idUser;
+
 
 	@Override
 	public String toString() {
-		return "Wishlist [idWishList=" + idWishList + ", book=" + book + ", idUser=" + idUser + "]";
+		return "Wishlist [idWishList=" + idWishList + ", book=" + book  + ", idUser=" + idUser
+				+ "]";
 	}
+
+	
+
+
+	
 
 	
 

@@ -32,12 +32,18 @@ public class Book{
 
 	@Column(name = "publisher", nullable = false)
     private String publisher;
+	
+	 @ManyToOne(targetEntity=Wishlist.class)
+	 @JoinColumn(name="book_id_Book")
+	 private Wishlist wishlist;
 
 	@Override
 	public String toString() {
 		return "Book [idBook=" + idBook + ", idGoogle=" + idGoogle + ", author=" + author + ", title=" + title
 				+ ", publisher=" + publisher + "]";
 	}
+	
+
 	
 	
 }

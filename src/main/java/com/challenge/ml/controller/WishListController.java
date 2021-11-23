@@ -1,6 +1,8 @@
 package com.challenge.ml.controller;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.modelmapper.ModelMapper;
@@ -25,13 +27,14 @@ public class WishListController {
 	
 	
 	@PostMapping("new/wishlist")
-	ResponseEntity<String>newWishList(@RequestBody BookVO bookVO,HttpSession session){
+	ResponseEntity<String>newWishList(@RequestBody List<BookVO> bookVO,HttpSession session){
+		System.out.println(bookVO.toString());
 		if(bookVO!=null) {
 			wishLisBsn.saveNewWishList(bookVO, session);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Registro exitoso");
 		}
 		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bookVO.toString());
 		
 	}
 
