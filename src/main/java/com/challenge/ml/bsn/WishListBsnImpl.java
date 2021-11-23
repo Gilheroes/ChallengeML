@@ -1,5 +1,7 @@
 package com.challenge.ml.bsn;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -31,13 +33,22 @@ public class WishListBsnImpl implements WishLisBsn{
 	private ModelMapper mapper;
 
 	@Override
-	public void saveNewWishList(@RequestBody List<BookVO> bookVO,HttpSession session) {
+	public void saveNewWishList(@RequestBody BookVO bookVO,HttpSession session) {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		WishListVO wishListVO=new WishListVO();
 		Users users=usersRepository.getById((int)session.getAttribute("id"));
+		Book book = mapper.map(bookVO,Book.class);
+		Book bookSaved = booksRepository.save(book);
+		bookVO.setIdBook(bookSaved.getIdBook());
 		wishListVO.setIdUser(users.getIdUsers());
 		wishListVO.setBook(bookVO);
 		Wishlist newWishlist=mapper.map(wishListVO, Wishlist.class);
+
+		if (null == newWishlist.getBook()){
+			newWishlist.setBook(List.of(bookSaved));
+		}else {
+			newWishlist.getBook().add(bookSaved);
+		}
 		System.out.println(newWishlist.toString());
 		wishListRepository.save(newWishlist);
 	}

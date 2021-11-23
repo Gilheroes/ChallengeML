@@ -27,7 +27,7 @@ public class WishListController {
 	
 	
 	@PostMapping("new/wishlist")
-	ResponseEntity<String>newWishList(@RequestBody List<BookVO> bookVO,HttpSession session){
+	ResponseEntity<String>newWishList(@RequestBody BookVO bookVO,HttpSession session){
 		System.out.println(bookVO.toString());
 		if(bookVO!=null) {
 			wishLisBsn.saveNewWishList(bookVO, session);

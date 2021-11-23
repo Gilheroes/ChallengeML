@@ -8,5 +8,5 @@ import com.challenge.ml.beans.BookVO;
 import com.challenge.ml.beans.WishListVO;
 
 public interface WishLisBsn {
-	void saveNewWishList(List<BookVO> bookVO,HttpSession session);
+	void saveNewWishList(BookVO bookVO,HttpSession session);
 }

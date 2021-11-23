@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class WishListVO {
 
 	private int idWishList;
-	private List<BookVO> book;
+	private BookVO book;
 	private int idUser;
 	@Override
 	public String toString() {
