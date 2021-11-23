@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 public class WishListVO {
 
 	private int idWishList;
-	private List<BookVO> listBooks;
+	private BookVO book;
 	private int idUser;
 	@Override
 	public String toString() {
 		return "WishListVO [idWishList=" + idWishList  +  ", listBooks="
-				+ listBooks + "]";
+				+ book +", "+idUser+ "]";
 	}
 
 	

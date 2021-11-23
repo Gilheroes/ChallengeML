@@ -3,10 +3,15 @@ package com.challenge.ml.bsn;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.Hibernate;
+import org.hibernate.SessionFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.challenge.ml.beans.BookVO;
 import com.challenge.ml.beans.UsersVO;
 import com.challenge.ml.beans.WishListVO;
 import com.challenge.ml.dao.BooksRepository;
@@ -28,15 +33,21 @@ public class WishListBsnImpl implements WishLisBsn{
 	private ModelMapper mapper;
 
 	@Override
-	public void saveNewWishList(WishListVO wishListVO,HttpSession session) {
+	public void saveNewWishList(@RequestBody BookVO bookVO,HttpSession session) {
 		System.out.println("recuperado: "+session.getAttribute("id"));
+		System.out.println(bookVO.toString());
+		WishListVO wishListVO=new WishListVO();
+		wishListVO.setBook(bookVO);
 		Users userE=usersRepository.getById((int)session.getAttribute("id"));
+		System.out.println(userE);
 		wishListVO.setIdUser(userE.getIdUsers());
-		Wishlist newWishlist=mapper.map(wishListVO, Wishlist.class); 
-		Book book=mapper.map(wishListVO.getListBooks(),Book.class);
-		booksRepository.save(book);
-		wishListRepository.saveAndFlush(newWishlist);
-		 
+		Wishlist newWishlist=mapper.map(wishListVO, Wishlist.class);
+		Book newBook=mapper.map(wishListVO.getBook(),Book.class);
+		System.out.println(newBook);
+		newBook=booksRepository.save(newBook);
+		newWishlist.setBook(newBook);
+		System.out.println(newWishlist.toString());
+		wishListRepository.save(newWishlist);
 	}
 
 }

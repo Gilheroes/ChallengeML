@@ -32,4 +32,12 @@ public class Book{
 
 	@Column(name = "publisher", nullable = false)
     private String publisher;
+
+	@Override
+	public String toString() {
+		return "Book [idBook=" + idBook + ", idGoogle=" + idGoogle + ", author=" + author + ", title=" + title
+				+ ", publisher=" + publisher + "]";
+	}
+	
+	
 }

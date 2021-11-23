@@ -6,10 +6,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -35,12 +37,18 @@ public class Wishlist extends BaseEntity<Integer>{
     @Column(name = "id_Wish_list", unique = true, nullable = false)
 	private int idWishList;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id_Book")
-	private List<Book> listOfBooks;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "idBook")
+	private Book book;
 	
 	@Column(name="idUser",nullable = false)
 	private int idUser;
 
+	@Override
+	public String toString() {
+		return "Wishlist [idWishList=" + idWishList + ", book=" + book + ", idUser=" + idUser + "]";
+	}
+
+	
 
 }
