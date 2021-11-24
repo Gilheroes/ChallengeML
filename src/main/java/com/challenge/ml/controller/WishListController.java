@@ -4,6 +4,7 @@ package com.challenge.ml.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +24,8 @@ public class WishListController {
 	
 	
 	@PostMapping("wishlist/new/list")
-	ResponseEntity<String>newWishList(@RequestBody BookVO bookVO,String nameOfWishList,HttpSession session){
-		System.out.println(bookVO.toString());
+	ResponseEntity<String>newWishList(@RequestBody BookVO bookVO,@Param("nameOfWishList")String nameOfWishList,HttpSession session){
+		System.out.println(bookVO.toString()); 
 		if(bookVO!=null && session!=null) {
 			wishLisBsn.saveNewWishList(bookVO,nameOfWishList, session);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Registro exitoso");
