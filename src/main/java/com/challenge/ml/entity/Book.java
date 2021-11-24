@@ -33,8 +33,8 @@ public class Book{
 	@Column(name = "publisher", nullable = false)
     private String publisher;
 	
-	 @ManyToOne(targetEntity=Wishlist.class)
-	 @JoinColumn(name="book_id_Book")
+	@ManyToOne(targetEntity=Wishlist.class)
+	@JoinColumn(name = "id_WishList")
 	 private Wishlist wishlist;
 
 	@Override

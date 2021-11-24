@@ -3,26 +3,17 @@ package com.challenge.ml.entity;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
@@ -42,15 +33,14 @@ public class Wishlist extends BaseEntity<Integer>{
     @Column(name = "id_Wish_list", unique = true, nullable = false)
 	private int idWishList;
 	
-	@JoinColumn(name = "id_Book")
-	@OneToMany(targetEntity=Book.class,orphanRemoval=true)
-	@JsonIgnore
-	@NotNull
+    @OneToMany(targetEntity=Book.class,mappedBy="wishlist",orphanRemoval=true)
 	private List<Book> book;
 	
 	@Column(name="id_user",nullable = false)
 	private int idUser;
-
+	
+	@Column(name="name_of_list",nullable = false)
+	private String nameOfList;
 
 	@Override
 	public String toString() {

@@ -1,31 +1,38 @@
 package com.challenge.ml.bsn;
 
-import javax.transaction.Transactional;
+import javax.servlet.http.HttpSession;
+import com.challenge.ml.dao.BooksRepository;
+import com.challenge.ml.dao.WishListRepository;
 
-import com.challenge.ml.dao.AddressRepository;
-import org.jvnet.hk2.annotations.Service;
+ 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 import com.challenge.ml.beans.BookVO;
-import com.challenge.ml.entity.Book;
+import com.challenge.ml.beans.WishListVO;
 
 @Service
-@Transactional
 public class BookBsnImpl implements BookBsn {
 	
 	@Autowired
-	AddressRepository bookDAO;
+	private BooksRepository bookDAO;
+	@Autowired
+	private WishListRepository wishListRepository;
+	@Autowired
+     private ModelMapper mapper;
 
-	final private ModelMapper mapper = new ModelMapper();
-	
-	public boolean addBook(BookVO newBook) {
-		Book book=mapper.map(newBook, Book.class);
-		try {
-		book=bookDAO.save(book);
-		return true;
-		}catch (Exception e) {
-			return false;
+	@Override
+	public BookVO getBooksOfWishList(String nameOfList,HttpSession session) {
+		WishListVO wishListVO=mapper.map(wishListRepository.findWishByNameOfWish(nameOfList), WishListVO.class);
+		int idUser=(int)session.getAttribute("id");
+		if(wishListVO.getIdUser()==idUser) {
+			BookVO bookVO=mapper.map(bookDAO.findBookByIdWishList(wishListVO.getIdWishList()), BookVO.class);
+			return bookVO;
 		}
+		return null;
+		
 	}
+	
+	
 
 }
