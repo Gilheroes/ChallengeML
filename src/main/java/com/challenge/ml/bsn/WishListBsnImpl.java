@@ -48,6 +48,7 @@ public class WishListBsnImpl implements WishLisBsn{
 		wishListVO.setIdUser(users.getIdUsers());
 		wishListVO.getBook().add(bookVO);
 		Wishlist newWishlist=mapper.map(wishListVO, Wishlist.class);
+		System.out.println(wishListRepository.findAll());
 		em.persist(newWishlist);
 	}
 
