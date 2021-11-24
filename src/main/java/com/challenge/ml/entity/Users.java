@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 
 @Getter
 @Setter
@@ -20,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class Users extends BaseEntity<Integer>{
+public class Users implements Serializable {
 	/**
 	 * 
 	 */

@@ -7,9 +7,20 @@ import org.springframework.stereotype.Repository;
 
 import com.challenge.ml.entity.Book;
 
+import java.util.List;
+
+/**
+ * Interface used for books.
+ *
+ * @version 0.0.1
+ * @since 0.0.1
+ */
 @Repository
 public interface BooksRepository extends JpaRepository<Book, Integer> {
 	
-	@Query(value="SELECT * FROM book b WHERE b.id_WishList=:idWishList",nativeQuery = true)
-	Book findBookByIdWishList(@Param("idWishList") int idWishList);
+	@Query(value="SELECT b FROM Book b WHERE b.wishlist.nameOfList=:wishlistName")
+	List<Book> findBooksByWishListName(@Param("wishlistName") String wishlistName);
+
+	@Query(value="SELECT b FROM Book b WHERE b.wishlist.idWishList=:idWishList")
+	List<Book> findBooksByWishListId(@Param("id") Integer idWishList);
 }

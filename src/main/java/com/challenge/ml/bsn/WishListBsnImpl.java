@@ -22,78 +22,66 @@ import com.challenge.ml.entity.Users;
 import com.challenge.ml.entity.Wishlist;
 
 @Service
-public class WishListBsnImpl implements WishLisBsn{
-	@Autowired
-	private BooksRepository booksRepository;
-	@Autowired
-	private WishListRepository wishListRepository;
-	@Autowired
-	UsersRepository usersRepository;
-	@Autowired
-	private ModelMapper mapper;
-	@Autowired
-	EntityManager em;
-	@Autowired
-	EntityManagerFactory emf;
+public class WishListBsnImpl implements WishLisBsn {
 
-	@Override
-	public void saveNewWishList( BookVO bookVO,String nameOfWishList,HttpSession session) {
-		System.out.println("Nombre: "+nameOfWishList);
-		em=EntityManagerFactoryUtils.getTransactionalEntityManager(emf);
-		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		WishListVO wishListVO=new WishListVO();
-		wishListVO.setNameOfList(nameOfWishList);
-		Users users=usersRepository.getById((int)session.getAttribute("id"));
-		wishListVO.setIdUser(users.getIdUsers());
-		wishListVO.getBook().add(bookVO);
-		wishListVO.setNameOfList(nameOfWishList);
-		Wishlist newWishlist=mapper.map(wishListVO, Wishlist.class);
-		wishListRepository.save(newWishlist);
-		System.out.println(wishListRepository.findAll());
+    @Autowired
+    private BooksRepository booksRepository;
+    @Autowired
+    private WishListRepository wishListRepository;
+    @Autowired
+    private UsersRepository usersRepository;
+    @Autowired
+    private ModelMapper mapper;
 
-	}
+    @Override
+    public void saveNewWishList(BookVO bookVO, String nameOfWishList, HttpSession session) {
+        System.out.println("Nombre: " + nameOfWishList);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        WishListVO wishListVO = new WishListVO();
+        wishListVO.setNameOfList(nameOfWishList);
+        Users users = usersRepository.getById((int) session.getAttribute("id"));
+        wishListVO.setIdUser(users.getIdUsers());
+        wishListVO.getBook().add(bookVO);
+        wishListVO.setNameOfList(nameOfWishList);
+        Wishlist newWishlist = mapper.map(wishListVO, Wishlist.class);
+        wishListRepository.save(newWishlist);
+        System.out.println(wishListRepository.findAll());
+    }
 
-	@Override
-	public WishListVO updateWishList(BookVO bookVO, HttpSession session) {
-		UsersVO usersVO=mapper.map(usersRepository.getById((int)session.getAttribute("id")),UsersVO.class);
-		Wishlist wishlist=wishListRepository.findWishByIdUser(usersVO.getId_users());
-		WishListVO wishListVO=mapper.map(wishlist, WishListVO.class);
-		for(BookVO bookVOl:wishListVO.getBook()) {
-			Book book=mapper.map(bookVOl, Book.class);
-			if(bookVOl.getTitle().equals(bookVO.getTitle()) && bookVOl.getIdGoogle().equals(bookVO.getIdGoogle())) {
-				booksRepository.delete(book);
-			}else {
-				bookVOl.setWishListVO(wishListVO);
-				book=mapper.map(bookVOl, Book.class);
-				booksRepository.save(book);
-			}
-			
-		}
-		wishlist=wishListRepository.findWishByIdUser(usersVO.getId_users());
-		wishListVO=mapper.map(wishlist, WishListVO.class);
-		return wishListVO;
-	}
+    @Override
+    public WishListVO updateWishList(BookVO bookVO, HttpSession session) {
+        UsersVO usersVO = mapper.map(usersRepository.getById((int) session.getAttribute("id")), UsersVO.class);
+        Wishlist wishlist = wishListRepository.findWishByIdUser(usersVO.getId_users());
+        WishListVO wishListVO = mapper.map(wishlist, WishListVO.class);
+        for (BookVO bookVOl : wishListVO.getBook()) {
+            Book book = mapper.map(bookVOl, Book.class);
+            if (bookVOl.getTitle().equals(bookVO.getTitle()) && bookVOl.getIdGoogle().equals(bookVO.getIdGoogle())) {
+                booksRepository.delete(book);
+            } else {
+                bookVOl.setWishListVO(wishListVO);
+                book = mapper.map(bookVOl, Book.class);
+                booksRepository.save(book);
+            }
 
-	@Override
-	public WishListVO findWishlistByIdUser( HttpSession session) {
-		System.out.println((int)session.getAttribute("id"));
-		System.out.println(wishListRepository.findAll());
-		WishListVO wishListVO=mapper.map(wishListRepository.findWishByIdUser((int)session.getAttribute("id")), WishListVO.class);
-		return wishListVO;
-	}
+        }
+        wishlist = wishListRepository.findWishByIdUser(usersVO.getId_users());
+        wishListVO = mapper.map(wishlist, WishListVO.class);
+        return wishListVO;
+    }
 
-	@Override
-	public WishListVO deleteWishList(String nameOfList,HttpSession session) {
-		WishListVO wishListVO=mapper.map(wishListRepository.findWishByNameOfWish(nameOfList), WishListVO.class);
-		if(wishListVO!=null) {
-			Wishlist wishlist=mapper.map(wishListVO, Wishlist.class);
-			em=EntityManagerFactoryUtils.getTransactionalEntityManager(emf);
-			em.remove(wishlist);
-		}
-		 
-		return null;
-	}
-	
-	
+    @Override
+    public WishListVO findWishlistByIdUser(HttpSession session) {
+        System.out.println((int) session.getAttribute("id"));
+        System.out.println(wishListRepository.findAll());
+        WishListVO wishListVO = mapper.map(wishListRepository.findWishByIdUser((int) session.getAttribute("id")), WishListVO.class);
+        return wishListVO;
+    }
+
+    @Override
+    public boolean deleteWishList(Integer id, HttpSession session) {
+        //Implementar metodo de borrado, considerar borrar todos los libros
+        return false;
+    }
+
 
 }

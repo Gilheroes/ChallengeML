@@ -6,13 +6,19 @@ import org.springframework.stereotype.Repository;
 
 import com.challenge.ml.entity.Wishlist;
 
+/**
+ * Interface used for wishlists.
+ *
+ * @version 0.0.1
+ * @since 0.0.1
+ */
 @Repository
 public interface WishListRepository extends JpaRepository<Wishlist,Integer> {
 	
-	@Query(value="SELECT * FROM wishlist w WHERE w.id_user=:idUser",nativeQuery = true)
+	@Query(value="SELECT w FROM Wishlist w WHERE w.idUser=:idUser")
 	Wishlist findWishByIdUser(@Param("idUser") int idUser);
 	
-	@Query(value="SELECT * FROM wishlist w WHERE w.name_of_list=:nameOfList",nativeQuery = true)
+	@Query(value="SELECT w FROM Wishlist  w WHERE w.nameOfList=:nameOfList")
 	Wishlist findWishByNameOfWish(@Param("name") String nameOfList);
 
 }

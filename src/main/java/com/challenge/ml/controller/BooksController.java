@@ -2,31 +2,58 @@ package com.challenge.ml.controller;
 
 import javax.servlet.http.HttpSession;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.challenge.ml.beans.BookVO;
 import com.challenge.ml.bsn.BookBsn;
 
+import java.util.List;
+
+/**
+ * Rest controller for books.
+ *
+ * @version 0.0.1
+ * @since 0.0.1
+ */
+@Slf4j
 @RestController
+@RequestMapping(value = "/books")
 public class BooksController {
 
-	@Autowired
-	BookBsn bookBsn;
-	
-	@GetMapping("books/get/my/books")
-	ResponseEntity<String> getMyBooks(@Param("nameOfList")String nameOfList, HttpSession session){
-		if(session!=null) {
-			BookVO bookVO=bookBsn.getBooksOfWishList(nameOfList, session);
-			if(bookVO!=null)
-				return ResponseEntity.status(HttpStatus.OK).body(bookVO.toString());
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No existen libros disponibles");
-		}
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
-	}
+    @Autowired
+    private BookBsn bookBsn;
+
+    @GetMapping(value = "/getByName", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getByName(final @Param("nameOfList") String nameOfList,final  HttpSession session) {
+        if (session != null) {
+            List<BookVO> bookVO = bookBsn.getBooksOfWishListByName(nameOfList, session);
+            if (bookVO.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(bookVO, HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
+    }
+
+    @GetMapping(value = "/getByWishlistId", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> getByWishlistId(final @RequestParam Integer wishlistId,final  HttpSession session) {
+        if (session != null) {
+            List<BookVO> bookVO = bookBsn.getBooksOfWishListById(wishlistId, session);
+            if (bookVO.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(bookVO, HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
+    }
 
 }

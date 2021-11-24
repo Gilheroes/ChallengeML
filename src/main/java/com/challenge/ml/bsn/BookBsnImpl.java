@@ -1,38 +1,47 @@
 package com.challenge.ml.bsn;
 
-import javax.servlet.http.HttpSession;
+import com.challenge.ml.beans.BookVO;
 import com.challenge.ml.dao.BooksRepository;
 import com.challenge.ml.dao.WishListRepository;
-
- 
+import com.challenge.ml.entity.Book;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
-import com.challenge.ml.beans.BookVO;
-import com.challenge.ml.beans.WishListVO;
+
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BookBsnImpl implements BookBsn {
-	
-	@Autowired
-	private BooksRepository bookDAO;
-	@Autowired
-	private WishListRepository wishListRepository;
-	@Autowired
-     private ModelMapper mapper;
 
-	@Override
-	public BookVO getBooksOfWishList(String nameOfList,HttpSession session) {
-		WishListVO wishListVO=mapper.map(wishListRepository.findWishByNameOfWish(nameOfList), WishListVO.class);
-		int idUser=(int)session.getAttribute("id");
-		if(wishListVO.getIdUser()==idUser) {
-			BookVO bookVO=mapper.map(bookDAO.findBookByIdWishList(wishListVO.getIdWishList()), BookVO.class);
-			return bookVO;
-		}
-		return null;
-		
-	}
-	
-	
+    @Autowired
+    private BooksRepository bookDAO;
+    @Autowired
+    private WishListRepository wishListRepository;
+    @Autowired
+    private ModelMapper mapper;
 
+
+    @Override
+    public List<BookVO> getBooksOfWishListByName(String name, HttpSession session) {
+        int idUser = (int) session.getAttribute("id");
+        List<Book> books = bookDAO.findBooksByWishListName(name);
+        List<BookVO> bookVOS = new ArrayList<>();
+        for (Book bookIterator : books) {
+            bookVOS.add(mapper.map(bookIterator, BookVO.class));
+        }
+        return bookVOS;
+    }
+
+    @Override
+    public List<BookVO> getBooksOfWishListById(Integer id, HttpSession session) {
+        int idUser = (int) session.getAttribute("id");
+        List<Book> books = bookDAO.findBooksByWishListId(id);
+        List<BookVO> bookVOS = new ArrayList<>();
+        for (Book bookIterator : books) {
+            bookVOS.add(mapper.map(bookIterator, BookVO.class));
+        }
+        return bookVOS;
+    }
 }

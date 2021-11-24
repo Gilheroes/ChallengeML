@@ -1,6 +1,7 @@
 package com.challenge.ml.entity;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -22,7 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "wishlist")
-public class Wishlist extends BaseEntity<Integer>{
+public class Wishlist implements Serializable {
 	
 	/**
 	 * 
