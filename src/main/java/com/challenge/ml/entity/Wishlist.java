@@ -40,8 +40,6 @@ public class Wishlist implements Serializable {
 	@Column(name="id_user",nullable = false)
 	private int idUser;
 	
-	@Column(name="name_of_list",nullable = false)
-	private String nameOfList;
 
 	@Override
 	public String toString() {

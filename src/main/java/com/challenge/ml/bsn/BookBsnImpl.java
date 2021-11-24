@@ -22,26 +22,19 @@ public class BookBsnImpl implements BookBsn {
     @Autowired
     private ModelMapper mapper;
 
-
-    @Override
-    public List<BookVO> getBooksOfWishListByName(String name, HttpSession session) {
-        int idUser = (int) session.getAttribute("id");
-        List<Book> books = bookDAO.findBooksByWishListName(name);
-        List<BookVO> bookVOS = new ArrayList<>();
-        for (Book bookIterator : books) {
-            bookVOS.add(mapper.map(bookIterator, BookVO.class));
-        }
-        return bookVOS;
-    }
-
     @Override
     public List<BookVO> getBooksOfWishListById(Integer id, HttpSession session) {
-        int idUser = (int) session.getAttribute("id");
+    	try {
         List<Book> books = bookDAO.findBooksByWishListId(id);
         List<BookVO> bookVOS = new ArrayList<>();
         for (Book bookIterator : books) {
             bookVOS.add(mapper.map(bookIterator, BookVO.class));
         }
         return bookVOS;
+    	}catch (Exception e) {
+    		return null;
+    	}
     }
+
+
 }

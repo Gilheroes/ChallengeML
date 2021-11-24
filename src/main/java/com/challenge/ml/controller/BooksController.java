@@ -33,9 +33,9 @@ public class BooksController {
     private BookBsn bookBsn;
 
     @GetMapping(value = "/getByName", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getByName(final @Param("nameOfList") String nameOfList,final  HttpSession session) {
+    public ResponseEntity<?> getByName(final @Param("idOfList") int idOfList ,final  HttpSession session) {
         if (session != null) {
-            List<BookVO> bookVO = bookBsn.getBooksOfWishListByName(nameOfList, session);
+            List<BookVO> bookVO = bookBsn.getBooksOfWishListByName(idOfList, session);
             if (bookVO.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

@@ -17,9 +17,6 @@ import java.util.List;
  */
 @Repository
 public interface BooksRepository extends JpaRepository<Book, Integer> {
-	
-	@Query(value="SELECT b FROM Book b WHERE b.wishlist.nameOfList=:wishlistName")
-	List<Book> findBooksByWishListName(@Param("wishlistName") String wishlistName);
 
 	@Query(value="SELECT b FROM Book b WHERE b.wishlist.idWishList=:idWishList")
 	List<Book> findBooksByWishListId(@Param("id") Integer idWishList);

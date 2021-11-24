@@ -4,6 +4,8 @@ package com.challenge.ml.controller;
 import com.challenge.ml.beans.BookVO;
 import com.challenge.ml.beans.WishListVO;
 import com.challenge.ml.bsn.WishLisBsn;
+import com.challenge.ml.dao.BooksRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -38,10 +40,10 @@ public class WishListController {
      * @return Wishlist information.
      */
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<String> create(final @RequestBody BookVO bookVO,final  @Param("nameOfWishList") String nameOfWishList,final  HttpSession session) {
+    ResponseEntity<String> create(final @RequestBody BookVO bookVO,final  @Param("idOfList") int idOfList,final  HttpSession session) {
         System.out.println(bookVO.toString());
         if (session != null) {
-            wishLisBsn.saveNewWishList(bookVO, nameOfWishList, session);
+            wishLisBsn.saveNewWishList(bookVO, idOfList, session);
             return ResponseEntity.status(HttpStatus.CREATED).body("Registro exitoso");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en la peticion");
@@ -64,11 +66,10 @@ public class WishListController {
     ResponseEntity<String> addBook(final @RequestBody BookVO bookVO,final  @Param("wishlistId") Integer wishlistId,final  HttpSession session) {
         System.out.println(bookVO.toString());
         if (session != null) {
-            //wishLisBsn.saveNewWishList(bookVO, nameOfWishList, session);
-            // agregar informacion de wishlist a repsuesta
+        	
             return ResponseEntity.status(HttpStatus.CREATED).body("Registro exitoso");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en la peticion");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
 
     }
 

@@ -18,7 +18,5 @@ public interface WishListRepository extends JpaRepository<Wishlist,Integer> {
 	@Query(value="SELECT w FROM Wishlist w WHERE w.idUser=:idUser")
 	Wishlist findWishByIdUser(@Param("idUser") int idUser);
 	
-	@Query(value="SELECT w FROM Wishlist  w WHERE w.nameOfList=:nameOfList")
-	Wishlist findWishByNameOfWish(@Param("name") String nameOfList);
 
 }

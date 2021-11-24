@@ -10,10 +10,10 @@ public interface WishLisBsn {
      * Create wishlist.
      *
      * @param bookVO         Book information.
-     * @param nameOfWishList Wishlist name.
+     * @param idWishList 	 Wishlist identifier.
      * @param session        User session.
      */
-    void saveNewWishList(final BookVO bookVO, final String nameOfWishList, HttpSession session);
+	WishListVO saveNewWishList(final BookVO bookVO, final int idWishList, HttpSession session);
 
     /**
      * Update wishlist.
@@ -40,5 +40,14 @@ public interface WishLisBsn {
      * @return True if the wishlist was deleted, otherwise false.
      */
     boolean deleteWishList(final Integer id, final HttpSession session);
+    
+    /**
+     * Create Book.
+     *
+     * @param bookVO         Book information.
+     * @param idWishList     Wishlist identifier.
+     * @param session        User session.
+     */
+	BookVO addBook(final BookVO bookVO, final int idWishList, HttpSession session);
 
 }
