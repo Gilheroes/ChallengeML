@@ -119,15 +119,15 @@ public class WishListController {
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<?> getAll(final HttpSession session) {
-        try {
-            if (session != null) {
-                List<WishListVO> wishListVO = wishLisBsn.findWishlistByIdUser(session);
-                if (wishListVO.isEmpty())
-                    return ResponseEntity.status(HttpStatus.OK).body(wishListVO);
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No existen listas disponibles");
-            }
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
-        } catch (Exception e) {
+    	try {
+	        if (session != null) {
+	            List<WishListVO> wishListVO = wishLisBsn.findWishlistByIdUser(session);
+	            if (wishListVO.isEmpty())
+	                return ResponseEntity.status(HttpStatus.OK).body(wishListVO);
+	            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No existen listas disponibles");
+	        }
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
+    	} catch (Exception e) {
             log.error("Failed to get a wishlist");
             return new ResponseEntity<>("Failed to get a wishlist", HttpStatus.NOT_FOUND);
         }

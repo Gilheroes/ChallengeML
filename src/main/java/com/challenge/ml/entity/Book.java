@@ -38,11 +38,6 @@ public class Book implements Serializable {
     @JoinColumn(name = "id_Wish_list")
     private Wishlist wishlist;
 
-	@Override
-	public String toString() {
-		return "Book [idBook=" + idBook + ", idGoogle=" + idGoogle + ", author=" + author + ", title=" + title
-				+ ", publisher=" + publisher + ", wishlist=" + wishlist + "]";
-	}
 
    
 
