@@ -1,4 +1,5 @@
 package com.challenge.ml.dao;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +17,7 @@ import com.challenge.ml.entity.Wishlist;
 public interface WishListRepository extends JpaRepository<Wishlist,Integer> {
 	
 	@Query(value="SELECT w FROM Wishlist w WHERE w.idUser=:idUser")
-	Wishlist findWishByIdUser(@Param("idUser") int idUser);
+	List<Wishlist> findWishByIdUser(@Param("idUser") int idUser);
 	
 
 }

@@ -1,5 +1,7 @@
 package com.challenge.ml.bsn;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import com.challenge.ml.beans.BookVO;
@@ -30,7 +32,7 @@ public interface WishLisBsn {
      * @param session User session.
      * @return Wishlist information.
      */
-    WishListVO findWishlistByIdUser(final HttpSession session);
+    List<WishListVO> findWishlistByIdUser(final HttpSession session);
 
     /**
      * Delete wishlist information.

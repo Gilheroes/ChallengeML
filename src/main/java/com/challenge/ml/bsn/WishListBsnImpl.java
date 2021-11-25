@@ -1,5 +1,7 @@
 package com.challenge.ml.bsn;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 
@@ -40,9 +42,14 @@ public class WishListBsnImpl implements WishLisBsn {
 			wishListVO.getBook().add(bookVO);
 			Wishlist newWishlist = mapper.map(wishListVO, Wishlist.class);
 				newWishlist = wishListRepository.save(newWishlist);
-				wishListVO = mapper.map(newWishlist, WishListVO.class);
+				System.out.println("Se guardo lista: "+newWishlist);
+				bookVO.setWishListVO(wishListVO);
+				Book newBook=mapper.map(bookVO, Book.class);
+				booksRepository.save(newBook);
+				System.out.println(wishListVO.toString());
 				return wishListVO;
 		} catch (Exception e) {
+			System.out.println("Error "+e);
 			return null;
 		}
 
@@ -70,12 +77,14 @@ public class WishListBsnImpl implements WishLisBsn {
 	}
 
 	@Override
-	public WishListVO findWishlistByIdUser(HttpSession session) {
+	public List<WishListVO> findWishlistByIdUser(HttpSession session) {
 		try {
-			WishListVO wishListVO = mapper.map(wishListRepository.findWishByIdUser((int) session.getAttribute("id")),
-					WishListVO.class);
+			List<Wishlist> wishList = wishListRepository.findWishByIdUser((int) session.getAttribute("id"));
+			List<WishListVO> wishListVO=new ArrayList<WishListVO>();
+			wishListVO.add(mapper.map(wishList, WishListVO.class));
 			return wishListVO;
 		} catch (Exception e) {
+			System.out.println("error: "+e);
 			return null;
 		}
 	}
@@ -111,6 +120,7 @@ public class WishListBsnImpl implements WishLisBsn {
 				System.out.println(idWishList);
 				List<Book> book =booksRepository.findBooksByWishListId(idWishList);
 				Book newBook=mapper.map(bookVO, Book.class);
+				newBook.getWishlist().setIdWishList(idWishList);
 				newBook.setWishlist(wishlist);
 				BookVO bookResult;
 				if(!book.isEmpty()) {
@@ -122,7 +132,8 @@ public class WishListBsnImpl implements WishLisBsn {
 						}
 					}
 					System.out.println("inserta");
-						return bookResult=mapper.map(booksRepository.save(newBook), BookVO.class);
+					bookResult=mapper.map(booksRepository.save(newBook), BookVO.class);
+						return bookResult;
 				}else {
 					System.out.println("inserta");
 					 	return bookResult=mapper.map(booksRepository.save(newBook), BookVO.class);

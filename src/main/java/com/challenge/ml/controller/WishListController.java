@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 /**
@@ -104,11 +106,11 @@ public class WishListController {
      * @return A list of wishlist
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<String> getAll(final HttpSession session) {
+    ResponseEntity<?> getAll(final HttpSession session) {
         if (session != null) {
-            WishListVO wishListVO = wishLisBsn.findWishlistByIdUser(session);
-            if (wishListVO != null)
-                return ResponseEntity.status(HttpStatus.OK).body(wishListVO.toString());
+            List<WishListVO> wishListVO = wishLisBsn.findWishlistByIdUser(session);
+            if (wishListVO.isEmpty())
+                return ResponseEntity.status(HttpStatus.OK).body(wishListVO);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No existen listas disponibles");
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
