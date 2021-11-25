@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import com.challenge.ml.beans.BookVO;
 import com.challenge.ml.beans.WishListVO;
+import com.challenge.ml.exception.InvalidDataException;
+import com.challenge.ml.exception.NotFoundException;
 
 public interface WishLisBsn {
     /**
@@ -50,6 +52,6 @@ public interface WishLisBsn {
      * @param idWishList     Wishlist identifier.
      * @param session        User session.
      */
-    WishListVO addBook(final BookVO bookVO, final int idWishList, HttpSession session);
+    WishListVO addBook(final BookVO bookVO, final int idWishList, HttpSession session) throws InvalidDataException, NotFoundException;
 
 }

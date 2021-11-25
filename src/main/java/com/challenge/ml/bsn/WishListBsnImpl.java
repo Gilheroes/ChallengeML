@@ -4,6 +4,8 @@ import java.util.*;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
+import com.challenge.ml.exception.InvalidDataException;
+import com.challenge.ml.exception.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,51 +105,45 @@ public class WishListBsnImpl implements WishLisBsn {
 
     @Override
     @Transactional
-    public WishListVO addBook(BookVO bookVO, int idWishList, HttpSession session) {
+    public WishListVO addBook(BookVO bookVO, int idWishList, HttpSession session) throws InvalidDataException, NotFoundException {
         // TODO Auto-generated method stub
-        try {
-            Optional<Wishlist> wishlistOptional = wishListRepository.findById(idWishList);
-            if (wishlistOptional.isPresent()) {
-                Wishlist wishlist = wishlistOptional.get();
 
-                if (this.bookAlreadyExistInWishlist(wishlist.getIdWishList(),bookVO)){
-                	return null;
-                	//deberia tirar una excepcion
-				}
+        Optional<Wishlist> wishlistOptional = wishListRepository.findById(idWishList);
+        if (wishlistOptional.isPresent()) {
+            Wishlist wishlist = wishlistOptional.get();
 
-                Book newBook = mapper.map(bookVO, Book.class);
-                newBook.setWishlist(wishlist);
-                Book saved = booksRepository.save(newBook);
-                
-                if(wishlist.getBook().isEmpty()){
-                    List<Book> books = List.of(saved);
-                    wishlist.setBook(books);
-                }else{
-                    wishlist.getBook().add(saved);
-                }
-
-                Wishlist wishListUpdated= wishListRepository.save(wishlist);
-
-                return mapper.map(wishListUpdated, WishListVO.class);
-
-            }else{
-                //Excepcion no existe wishlist
-                return null;
+            if (this.bookAlreadyExistInWishlist(wishlist.getIdWishList(), bookVO)) {
+                throw new InvalidDataException("Ya existe ese libro en tu lista");
             }
-        } catch (Exception e) {
-            System.out.println("error: " + e);
-            return null; 
+
+            Book newBook = mapper.map(bookVO, Book.class);
+            newBook.setWishlist(wishlist);
+            Book saved = booksRepository.save(newBook);
+
+            if (wishlist.getBook().isEmpty()) {
+                List<Book> books = List.of(saved);
+                wishlist.setBook(books);
+            } else {
+                wishlist.getBook().add(saved);
+            }
+
+            Wishlist wishListUpdated = wishListRepository.save(wishlist);
+
+            return mapper.map(wishListUpdated, WishListVO.class);
+
+        } else {
+            throw new NotFoundException("No existe wishlist con ese identificador.");
         }
     }
 
-    private boolean bookAlreadyExistInWishlist(final Integer idWishList, BookVO bookVO){
-		List<Book> books = booksRepository.findBooksByWishListId(idWishList);
-		for (Book book :books) {
-			if (book.getIdGoogle().equals(bookVO.getIdGoogle())){
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean bookAlreadyExistInWishlist(final Integer idWishList, BookVO bookVO) {
+        List<Book> books = booksRepository.findBooksByWishListId(idWishList);
+        for (Book book : books) {
+            if (book.getIdGoogle().equals(bookVO.getIdGoogle())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
