@@ -13,7 +13,7 @@ public interface WishLisBsn {
      * @param idWishList 	 Wishlist identifier.
      * @param session        User session.
      */
-	WishListVO saveNewWishList(final BookVO bookVO, final int idWishList, HttpSession session);
+	WishListVO saveNewWishList(final BookVO bookVO, HttpSession session);
 
     /**
      * Update wishlist.

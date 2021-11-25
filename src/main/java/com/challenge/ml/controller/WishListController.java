@@ -40,11 +40,11 @@ public class WishListController {
      * @return Wishlist information.
      */
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<String> create(final @RequestBody BookVO bookVO,final  @Param("idOfList") int idOfList,final  HttpSession session) {
+    ResponseEntity<?> create(final @RequestBody BookVO bookVO,final  HttpSession session) {
         System.out.println(bookVO.toString());
         if (session != null) {
-            wishLisBsn.saveNewWishList(bookVO, idOfList, session);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Registro exitoso");
+            WishListVO wishListVO=wishLisBsn.saveNewWishList(bookVO, session);
+            return ResponseEntity.status(HttpStatus.CREATED).body(wishListVO);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en la peticion");
 
@@ -63,11 +63,11 @@ public class WishListController {
      * @return Wishlist information.
      */
     @PostMapping(value = "/addBook", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<String> addBook(final @RequestBody BookVO bookVO,final  @Param("wishlistId") Integer wishlistId,final  HttpSession session) {
+    ResponseEntity<?> addBook(final @RequestBody BookVO bookVO,final  @Param("wishlistId") Integer wishlistId,final  HttpSession session) {
         System.out.println(bookVO.toString());
         if (session != null) {
-        	
-            return ResponseEntity.status(HttpStatus.CREATED).body("Registro exitoso");
+        	BookVO book=wishLisBsn.addBook(bookVO, wishlistId, session);
+            return ResponseEntity.status(HttpStatus.CREATED).body(book);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
 
@@ -84,18 +84,17 @@ public class WishListController {
      * @return Wishlist information.
      */
     @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<String> update(final @RequestBody BookVO bookVO,final  HttpSession session) {
+    ResponseEntity<?> update(final @RequestBody BookVO bookVO,final  HttpSession session) {
         if (bookVO != null) {
             if (session != null) {
-                wishLisBsn.updateWishList(bookVO, session);
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(bookVO.toString());
+                WishListVO wishListVO=wishLisBsn.updateWishList(bookVO, session);
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(wishListVO);
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error no se guardo la lista");
     }
 
-    //Toma el ejemplo de bookscontroller
 
     /**
      * Get All wishlists.

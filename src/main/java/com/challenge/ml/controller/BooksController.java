@@ -32,18 +32,6 @@ public class BooksController {
     @Autowired
     private BookBsn bookBsn;
 
-    @GetMapping(value = "/getByName", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getByName(final @Param("idOfList") int idOfList ,final  HttpSession session) {
-        if (session != null) {
-            List<BookVO> bookVO = bookBsn.getBooksOfWishListByName(idOfList, session);
-            if (bookVO.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(bookVO, HttpStatus.OK);
-        }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
-    }
-
     @GetMapping(value = "/getByWishlistId", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getByWishlistId(final @RequestParam Integer wishlistId,final  HttpSession session) {
         if (session != null) {

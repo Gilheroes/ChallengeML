@@ -30,7 +30,7 @@ public class DemoApplication {
 			http.csrf().disable()
 					.addFilterAfter(new ChallengeAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/users/register","/users/login/token").permitAll()
+					.antMatchers(HttpMethod.POST, "/users","/users/login/token").permitAll()
 					.anyRequest().authenticated();
 			
 			

@@ -31,7 +31,7 @@ public class WishListBsnImpl implements WishLisBsn {
 	private ModelMapper mapper;
 
 	@Override
-	public WishListVO saveNewWishList(BookVO bookVO, int idWishList, HttpSession session) {
+	public WishListVO saveNewWishList(BookVO bookVO, HttpSession session) {
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		try {
 			WishListVO wishListVO = new WishListVO();
@@ -39,15 +39,12 @@ public class WishListBsnImpl implements WishLisBsn {
 			wishListVO.setIdUser(users.getIdUsers());
 			wishListVO.getBook().add(bookVO);
 			Wishlist newWishlist = mapper.map(wishListVO, Wishlist.class);
-			if (wishListRepository.findById(idWishList) == null) {
 				newWishlist = wishListRepository.save(newWishlist);
 				wishListVO = mapper.map(newWishlist, WishListVO.class);
 				return wishListVO;
-			}
 		} catch (Exception e) {
 			return null;
 		}
-		return null;
 
 	}
 
