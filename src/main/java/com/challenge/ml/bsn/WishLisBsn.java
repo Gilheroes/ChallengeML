@@ -17,7 +17,7 @@ public interface WishLisBsn {
      * @param idWishList 	 Wishlist identifier.
      * @param session        User session.
      */
-	WishListVO saveNewWishList(HttpSession session);
+	WishListVO saveNewWishList(HttpSession session)throws InvalidDataException, NotFoundException;
 
     /**
      * Update wishlist.
@@ -26,7 +26,7 @@ public interface WishLisBsn {
      * @param session User session.
      * @return Wishlist information.
      */
-    WishListVO updateWishList(final BookVO bookVO,final Integer idWishList, final HttpSession session);
+    WishListVO updateWishList(final BookVO bookVO,final Integer idWishList, final HttpSession session)throws InvalidDataException, NotFoundException;
 
     /**
      * Get wishlist by user id.
@@ -34,7 +34,7 @@ public interface WishLisBsn {
      * @param session User session.
      * @return Wishlist information.
      */
-    List<WishListVO> findWishlistByIdUser(final HttpSession session);
+    List<WishListVO> findWishlistByIdUser(final HttpSession session)throws InvalidDataException, NotFoundException;
 
     /**
      * Delete wishlist information.
@@ -43,7 +43,7 @@ public interface WishLisBsn {
      * @param session User session.
      * @return True if the wishlist was deleted, otherwise false.
      */
-    boolean deleteWishList(final Integer id, final HttpSession session);
+    boolean deleteWishList(final Integer id, final HttpSession session)throws InvalidDataException, NotFoundException;
     
     /**
      * Create Book.

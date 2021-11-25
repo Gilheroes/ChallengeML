@@ -2,12 +2,14 @@ package com.challenge.ml.bsn;
 
 import javax.servlet.http.HttpSession;
 import com.challenge.ml.beans.UsersVO;
+import com.challenge.ml.exception.InvalidDataException;
+import com.challenge.ml.exception.NotFoundException;
 
 public interface EnrolamientoBsn {
 	
-	UsersVO saveNewUser(UsersVO usersVO);
+	UsersVO saveNewUser(UsersVO usersVO)throws InvalidDataException, NotFoundException;
 	String getJWTToken(String userName);
 	boolean validateUser(UsersVO userVO);
-	UsersVO findByUserAndPwd(UsersVO usersVO, HttpSession httpSession);
+	UsersVO findByUserAndPwd(UsersVO usersVO, HttpSession httpSession) throws InvalidDataException, NotFoundException;
 
 }

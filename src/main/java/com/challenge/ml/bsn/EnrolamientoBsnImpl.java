@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.challenge.ml.beans.UsersVO;
 import com.challenge.ml.dao.UsersRepository;
 import com.challenge.ml.entity.Users;
+import com.challenge.ml.exception.NotFoundException;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -49,10 +51,14 @@ public class EnrolamientoBsnImpl implements EnrolamientoBsn {
     }
 
     @Override
-    public UsersVO saveNewUser(UsersVO newUser) {
+    public UsersVO saveNewUser(UsersVO newUser) throws NotFoundException {
+    	try {
         Users users = mapper.map(newUser, Users.class);
         UsersVO result = mapper.map(usersRepository.save(users), UsersVO.class);
         return result;
+    	} catch (Exception e) {
+            throw new NotFoundException("No existe wishlist con ese identificador.");
+        }
     }
 
     @Override
@@ -71,17 +77,15 @@ public class EnrolamientoBsnImpl implements EnrolamientoBsn {
     }
 
     @Override
-    public UsersVO findByUserAndPwd(UsersVO usersVO, HttpSession httpSession) {
+    public UsersVO findByUserAndPwd(UsersVO usersVO, HttpSession httpSession) throws NotFoundException {
         try {
             Users users = mapper.map(usersVO, Users.class);
             users = usersRepository.findByUserAndPwd(usersVO.getUser_name(), usersVO.getPassword());
-            System.out.println(users.getIdUsers());
             usersVO = mapper.map(users, UsersVO.class);
-            System.out.println("id: " + users.getIdUsers());
             httpSession.setAttribute("id", users.getIdUsers());
             return usersVO;
         } catch (Exception e) {
-            return null;
+            throw new NotFoundException("No existe wishlist con ese identificador.");
         }
     }
 

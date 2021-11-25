@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.challenge.ml.beans.UsersVO;
 import com.challenge.ml.bsn.EnrolamientoBsn;
+import com.challenge.ml.exception.InvalidDataException;
+import com.challenge.ml.exception.NotFoundException;
 
 
 /**
@@ -45,8 +47,15 @@ public class UsersController {
                 return new ResponseEntity<>(user, HttpStatus.CREATED);
             }
             return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario ya existe");
+        } catch (InvalidDataException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (NotFoundException ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Peticion invalida");
+            log.error("Failed to create user, Error: " + e.getMessage());
+            return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -64,8 +73,15 @@ public class UsersController {
                 return ResponseEntity.status(HttpStatus.OK).body(enrolamientoBsn.getJWTToken(usersVO.getUser_name()));
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario o contrasenia no validos");
+        } catch (InvalidDataException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (NotFoundException ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Peticion no valida");
+            log.error("Failed to login user, Error: " + e.getMessage());
+            return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

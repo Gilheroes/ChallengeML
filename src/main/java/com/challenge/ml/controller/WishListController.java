@@ -50,9 +50,15 @@ public class WishListController {
                 return ResponseEntity.status(HttpStatus.CREATED).body(wishListVO);
             }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en la peticion");
+        } catch (InvalidDataException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (NotFoundException ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            log.error("Failed to create a wishlist");
-            return new ResponseEntity<>("Failed to create a wishlist", HttpStatus.NOT_FOUND);
+            log.error("Failed to creaye wishlist, Error: " + e.getMessage());
+            return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -104,9 +110,15 @@ public class WishListController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
             }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error no se guardo la lista");
+        } catch (InvalidDataException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (NotFoundException ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            log.error("Failed to update a wishlist ", e);
-            return new ResponseEntity<>("Failed to update a wishlist ", HttpStatus.NOT_FOUND);
+            log.error("Failed to add book to wishlist, Error: " + e.getMessage());
+            return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -127,10 +139,16 @@ public class WishListController {
 	            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No existen listas disponibles");
 	        }
 	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
-    	} catch (Exception e) {
-            log.error("Failed to get a wishlist");
-            return new ResponseEntity<>("Failed to get a wishlist", HttpStatus.NOT_FOUND);
-        }
+    	 } catch (InvalidDataException e) {
+             log.error(e.getMessage());
+             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+         } catch (NotFoundException ex) {
+             log.error(ex.getMessage());
+             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+         } catch (Exception e) {
+             log.error("Failed to get wishlist, Error: " + e.getMessage());
+             return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
+         }
     }
 
 
@@ -151,9 +169,15 @@ public class WishListController {
                 return new ResponseEntity<>("The wishlist could not be removed.", HttpStatus.BAD_REQUEST);
             }
 
+        } catch (InvalidDataException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (NotFoundException ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            log.error("Failed to get a wishlist by identifier: {}", id, e);
-            return new ResponseEntity<>("Failed to get a wishlist by it's identifier", HttpStatus.NOT_FOUND);
+            log.error("Failed to delete book to wishlist, Error: " + e.getMessage());
+            return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

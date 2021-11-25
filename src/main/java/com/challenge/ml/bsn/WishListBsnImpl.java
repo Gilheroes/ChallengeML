@@ -10,8 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpMessageConverterExtractor;
-
 import com.challenge.ml.beans.BookVO;
 import com.challenge.ml.beans.WishListVO;
 import com.challenge.ml.dao.BooksRepository;
@@ -20,8 +18,6 @@ import com.challenge.ml.dao.WishListRepository;
 import com.challenge.ml.entity.Book;
 import com.challenge.ml.entity.Users;
 import com.challenge.ml.entity.Wishlist;
-
-import net.bytebuddy.implementation.bytecode.Throw;
 
 @Service
 public class WishListBsnImpl implements WishLisBsn {
@@ -37,7 +33,7 @@ public class WishListBsnImpl implements WishLisBsn {
     private ModelMapper mapper;
 
     @Override
-    public WishListVO saveNewWishList(HttpSession session) {
+    public WishListVO saveNewWishList(HttpSession session) throws NotFoundException {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         try {
             Users users = usersRepository.getById((int) session.getAttribute("id"));
@@ -47,13 +43,13 @@ public class WishListBsnImpl implements WishLisBsn {
             return mapper.map(savedWishlist, WishListVO.class);
         } catch (Exception e) {
             System.out.println("Error " + e);
-            return null;
+            throw new NotFoundException("No existe wishlist con ese identificador.");
         }
 
     }
 
     @Override
-    public WishListVO updateWishList(BookVO bookVO, Integer idWishList, HttpSession session) {
+    public WishListVO updateWishList(BookVO bookVO, Integer idWishList, HttpSession session) throws NotFoundException {
         try {
             Optional<Wishlist> wishListOptional =wishListRepository.findById(idWishList);
             if (wishListOptional.isPresent()) {
@@ -72,14 +68,14 @@ public class WishListBsnImpl implements WishLisBsn {
 	            }
 		            return result;
             }
-            return null;
+            throw new NotFoundException("No existe wishlist con ese identificador.");
         } catch (Exception e) {
-            return null;
+            throw new NotFoundException("No existe wishlist con ese identificador.");
         }
     }
 
     @Override
-    public List<WishListVO> findWishlistByIdUser(HttpSession session) {
+    public List<WishListVO> findWishlistByIdUser(HttpSession session) throws NotFoundException {
         try {
         	List<Wishlist> wishlist=wishListRepository.findWishByIdUser((int) session.getAttribute("id"));
         	List<WishListVO> listVO=new ArrayList<WishListVO>();
@@ -92,20 +88,19 @@ public class WishListBsnImpl implements WishLisBsn {
         		}
 	        		return listVO;
         	}
-            return null;
+            throw new NotFoundException("No existe wishlist con ese identificador.");
         } catch (Exception e) {
             System.out.println("error: " + e);
-            return null;
+            throw new NotFoundException("No existe wishlist con ese identificador.");
         }
     }
 
     @Override
-    public boolean deleteWishList(Integer id, HttpSession session) {
+    public boolean deleteWishList(Integer id, HttpSession session) throws NotFoundException {
         try {
             Optional<Wishlist> wishListOptional =wishListRepository.findById(id);
             if (wishListOptional.isPresent()) {
             	Wishlist wishlist = wishListOptional.get();
-                WishListVO result=new WishListVO();
                 List<Book> lstBook = booksRepository.findBooksByWishListId(wishlist.getIdWishList());
                 if (lstBook.size() > 0) {
                     for (Book book : lstBook) {
@@ -117,7 +112,7 @@ public class WishListBsnImpl implements WishLisBsn {
             }
             return false;
         } catch (Exception e) {
-            return false;
+            throw new NotFoundException("No existe wishlist con ese identificador.");
         }
     }
 

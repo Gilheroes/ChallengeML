@@ -3,7 +3,11 @@ package com.challenge.ml.controller;
 
 import com.challenge.ml.api.books.model.Wrapper;
 import com.challenge.ml.beans.GoogleBooksVO;
+import com.challenge.ml.bsn.GoogleBooksBsn;
+
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +28,8 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping(value = "/google/books")
 public class GoogleBooksController {
+	@Autowired
+	GoogleBooksBsn googleBooksBsn;
 
     /**
      * Google url in properties.
@@ -40,11 +46,13 @@ public class GoogleBooksController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<Wrapper> getBooks(final @RequestBody GoogleBooksVO googleBooksVO) {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Wrapper> response = restTemplate.getForEntity(url + googleBooksVO.getTitle(), Wrapper.class);
-        if (response.getStatusCode().value() == 200) {
+        if(googleBooksVO.getTitle().trim()!=null) {
+            ResponseEntity<Wrapper> response = restTemplate.getForEntity(url +googleBooksBsn.createRequest(googleBooksVO), Wrapper.class);
+        if (response.getStatusCode().value() == 200) 
             return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
-        } else {
+         else 
             return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
     }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+}
 }
