@@ -2,7 +2,6 @@ package com.challenge.ml.bsn;
 
 import com.challenge.ml.beans.BookVO;
 import com.challenge.ml.dao.BooksRepository;
-import com.challenge.ml.dao.WishListRepository;
 import com.challenge.ml.entity.Book;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ public class BookBsnImpl implements BookBsn {
 
     @Autowired
     private BooksRepository bookDAO;
-    @Autowired
-    private WishListRepository wishListRepository;
     @Autowired
     private ModelMapper mapper;
 

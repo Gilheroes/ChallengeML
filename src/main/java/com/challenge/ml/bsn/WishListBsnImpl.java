@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.challenge.ml.beans.BookVO;
-import com.challenge.ml.beans.UsersVO;
 import com.challenge.ml.beans.WishListVO;
 import com.challenge.ml.dao.BooksRepository;
 import com.challenge.ml.dao.UsersRepository;
@@ -119,7 +118,7 @@ public class WishListBsnImpl implements WishLisBsn {
                 Book newBook = mapper.map(bookVO, Book.class);
                 newBook.setWishlist(wishlist);
                 Book saved = booksRepository.save(newBook);
-
+                
                 if(wishlist.getBook().isEmpty()){
                     List<Book> books = List.of(saved);
                     wishlist.setBook(books);
@@ -137,7 +136,7 @@ public class WishListBsnImpl implements WishLisBsn {
             }
         } catch (Exception e) {
             System.out.println("error: " + e);
-            return null;
+            return null; 
         }
     }
 

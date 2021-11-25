@@ -19,7 +19,7 @@ public class BookVO {
 	@Override
 	public String toString() {
 		return "BookVO [idBook=" + idBook + ", idGoogle=" + idGoogle + ", author=" + author + ", title=" + title
-				+ ", publisher=" + publisher + "]";
+				+ ", publisher=" + publisher + ", wishListVO=" + wishListVO + "]";
 	}
 	
 	
