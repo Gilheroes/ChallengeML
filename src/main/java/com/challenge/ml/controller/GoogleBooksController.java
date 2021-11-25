@@ -37,7 +37,7 @@ public class GoogleBooksController {
      * @param googleBooksVO Object with the parameter for the request.
      * @return A Wrapper class with the information.
      */
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<Wrapper> getBooks(final @RequestBody GoogleBooksVO googleBooksVO) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Wrapper> response = restTemplate.getForEntity(url + googleBooksVO.getTitle(), Wrapper.class);
