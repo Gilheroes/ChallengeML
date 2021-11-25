@@ -43,7 +43,7 @@ public class WishListBsnImpl implements WishLisBsn {
 			Wishlist newWishlist = mapper.map(wishListVO, Wishlist.class);
 				newWishlist = wishListRepository.save(newWishlist);
 				System.out.println("Se guardo lista: "+newWishlist);
-				bookVO.setWishListVO(wishListVO);
+				bookVO.setWishListVO(wishListVO); 
 				Book newBook=mapper.map(bookVO, Book.class);
 				booksRepository.save(newBook);
 				System.out.println(wishListVO.toString());
