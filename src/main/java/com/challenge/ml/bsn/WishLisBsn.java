@@ -22,7 +22,7 @@ public interface WishLisBsn {
      * @param session User session.
      * @return Wishlist information.
      */
-    WishListVO updateWishList(final BookVO bookVO, final HttpSession session);
+    WishListVO updateWishList(final BookVO bookVO,final Integer idWishList, final HttpSession session);
 
     /**
      * Get wishlist by user id.

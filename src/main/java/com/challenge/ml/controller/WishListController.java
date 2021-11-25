@@ -67,14 +67,15 @@ public class WishListController {
         System.out.println(bookVO.toString());
         if (session != null) {
         	BookVO book=wishLisBsn.addBook(bookVO, wishlistId, session);
-            return ResponseEntity.status(HttpStatus.CREATED).body(book);
+        	if(book!=null)
+        		return ResponseEntity.status(HttpStatus.CREATED).body(book);
+        	else
+        		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El libro ya existe");
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
 
     }
 
-    //Requieres el id de la wishlist un libro puede
-    // o noestar en varios wishlist
 
     /**
      * Method to update wishlist information.
@@ -84,10 +85,10 @@ public class WishListController {
      * @return Wishlist information.
      */
     @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<?> update(final @RequestBody BookVO bookVO,final  HttpSession session) {
+    ResponseEntity<?> update(final @RequestBody BookVO bookVO,final @Param("idWishList") Integer idWishList,final  HttpSession session) {
         if (bookVO != null) {
             if (session != null) {
-                WishListVO wishListVO=wishLisBsn.updateWishList(bookVO, session);
+                WishListVO wishListVO=wishLisBsn.updateWishList(bookVO,idWishList, session);
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(wishListVO);
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");

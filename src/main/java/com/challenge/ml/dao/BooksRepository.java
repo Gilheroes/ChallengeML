@@ -19,5 +19,5 @@ import java.util.List;
 public interface BooksRepository extends JpaRepository<Book, Integer> {
 
 	@Query(value="SELECT b FROM Book b WHERE b.wishlist.idWishList=:idWishList")
-	List<Book> findBooksByWishListId(@Param("id") Integer idWishList);
+	List<Book> findBooksByWishListId(@Param("idWishList") Integer idWishList);
 }
