@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpMessageConverterExtractor;
 
 import com.challenge.ml.beans.BookVO;
 import com.challenge.ml.beans.WishListVO;
@@ -17,6 +18,8 @@ import com.challenge.ml.dao.WishListRepository;
 import com.challenge.ml.entity.Book;
 import com.challenge.ml.entity.Users;
 import com.challenge.ml.entity.Wishlist;
+
+import net.bytebuddy.implementation.bytecode.Throw;
 
 @Service
 public class WishListBsnImpl implements WishLisBsn {
@@ -50,19 +53,24 @@ public class WishListBsnImpl implements WishLisBsn {
     @Override
     public WishListVO updateWishList(BookVO bookVO, Integer idWishList, HttpSession session) {
         try {
-            WishListVO wishListVO = mapper.map(wishListRepository.findById(idWishList), WishListVO.class);
-            for (BookVO bookVOl : wishListVO.getBook()) {
-                Book book = mapper.map(bookVOl, Book.class);
-                if (bookVOl.getTitle().equals(bookVO.getTitle())
-                        && bookVOl.getIdGoogle().equals(bookVO.getIdGoogle())) {
-                    booksRepository.delete(book);
-                } else {
-                    bookVOl.setWishListVO(wishListVO);
-                    book = mapper.map(bookVOl, Book.class);
-                    booksRepository.save(book);
-                }
+            Optional<Wishlist> wishListOptional =wishListRepository.findById(idWishList);
+            if (wishListOptional.isPresent()) {
+	                Wishlist wishlist = wishListOptional.get();
+	                WishListVO result=new WishListVO();
+		            for (Book book : wishlist.getBook()) {
+		                if (book.getIdBook()==bookVO.getIdBook()) {
+		                	book=booksRepository.getOne(book.getIdBook());
+		                	book.setAuthor(bookVO.getAuthor());
+		                	book.setIdGoogle(bookVO.getIdGoogle());
+		                	book.setTitle(bookVO.getTitle());
+		                	book.setPublisher(bookVO.getPublisher());
+		                	book=booksRepository.save(book);
+		                	result.getBook().add(mapper.map(book, BookVO.class));
+		                }
+	            }
+		            return result;
             }
-            return wishListVO = mapper.map(wishListRepository.findById(idWishList), WishListVO.class);
+            return null;
         } catch (Exception e) {
             return null;
         }
@@ -71,10 +79,18 @@ public class WishListBsnImpl implements WishLisBsn {
     @Override
     public List<WishListVO> findWishlistByIdUser(HttpSession session) {
         try {
-            List<Wishlist> wishList = wishListRepository.findWishByIdUser((int) session.getAttribute("id"));
-            List<WishListVO> wishListVO = new ArrayList<WishListVO>();
-            wishListVO.add(mapper.map(wishList, WishListVO.class));
-            return wishListVO;
+        	List<Wishlist> wishlist=wishListRepository.findWishByIdUser((int) session.getAttribute("id"));
+        	List<WishListVO> listVO=new ArrayList<WishListVO>();
+        	if(!wishlist.isEmpty()) {
+        		WishListVO wishListVO=new WishListVO();
+        		for(Wishlist result:wishlist) {
+        			wishListVO=mapper.map(result, WishListVO.class);
+        			System.out.println(wishListVO);
+        			listVO.add(wishListVO);
+        		}
+	        		return listVO;
+        	}
+            return null;
         } catch (Exception e) {
             System.out.println("error: " + e);
             return null;
@@ -84,15 +100,17 @@ public class WishListBsnImpl implements WishLisBsn {
     @Override
     public boolean deleteWishList(Integer id, HttpSession session) {
         try {
-            Wishlist wishList = mapper.map(wishListRepository.findById(id), Wishlist.class);
-            if (wishList != null) {
-                List<Book> lstBook = booksRepository.findBooksByWishListId(wishList.getIdWishList());
+            Optional<Wishlist> wishListOptional =wishListRepository.findById(id);
+            if (wishListOptional.isPresent()) {
+            	Wishlist wishlist = wishListOptional.get();
+                WishListVO result=new WishListVO();
+                List<Book> lstBook = booksRepository.findBooksByWishListId(wishlist.getIdWishList());
                 if (lstBook.size() > 0) {
                     for (Book book : lstBook) {
                         booksRepository.deleteById(book.getIdBook());
                     }
                 }
-                wishListRepository.delete(wishList);
+                wishListRepository.delete(wishlist);
                 return true;
             }
             return false;

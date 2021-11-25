@@ -117,7 +117,7 @@ public class WishListController {
     	try {
 	        if (session != null) {
 	            List<WishListVO> wishListVO = wishLisBsn.findWishlistByIdUser(session);
-	            if (wishListVO.isEmpty())
+	            if (!wishListVO.isEmpty())
 	                return ResponseEntity.status(HttpStatus.OK).body(wishListVO);
 	            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No existen listas disponibles");
 	        }

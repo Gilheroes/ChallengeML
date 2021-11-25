@@ -14,8 +14,5 @@ public class WishListVO {
 	private int idWishList;
 	private List<BookVO> book= new ArrayList<>();
 	private int idUser;
-	@Override
-	public String toString() {
-		return "WishListVO [idWishList=" + idWishList + ", book=" + book + ", idUser=" + idUser +  "]";
-	}
+
 }
