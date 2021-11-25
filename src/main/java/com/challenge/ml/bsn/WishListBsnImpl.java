@@ -1,9 +1,8 @@
 package com.challenge.ml.bsn;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -23,127 +22,133 @@ import com.challenge.ml.entity.Wishlist;
 @Service
 public class WishListBsnImpl implements WishLisBsn {
 
-	@Autowired
-	private BooksRepository booksRepository;
-	@Autowired
-	private WishListRepository wishListRepository;
-	@Autowired
-	private UsersRepository usersRepository;
-	@Autowired
-	private ModelMapper mapper;
+    @Autowired
+    private BooksRepository booksRepository;
+    @Autowired
+    private WishListRepository wishListRepository;
+    @Autowired
+    private UsersRepository usersRepository;
 
-	@Override
-	public WishListVO saveNewWishList(BookVO bookVO, HttpSession session) {
-		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-		try {
-			WishListVO wishListVO = new WishListVO();
-			Users users = usersRepository.getById((int) session.getAttribute("id"));
-			wishListVO.setIdUser(users.getIdUsers());
-			wishListVO.getBook().add(bookVO);
-			Wishlist newWishlist = mapper.map(wishListVO, Wishlist.class);
-				newWishlist = wishListRepository.save(newWishlist);
-				System.out.println("Se guardo lista: "+newWishlist);
-				bookVO.setWishListVO(wishListVO); 
-				Book newBook=mapper.map(bookVO, Book.class);
-				booksRepository.save(newBook);
-				System.out.println(wishListVO.toString());
-				return wishListVO;
-		} catch (Exception e) {
-			System.out.println("Error "+e);
-			return null;
-		}
+    @Autowired
+    private ModelMapper mapper;
 
-	}
+    @Override
+    public WishListVO saveNewWishList(HttpSession session) {
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        try {
+            Users users = usersRepository.getById((int) session.getAttribute("id"));
+            Wishlist newWishlist = new Wishlist();
+            newWishlist.setIdUser(users.getIdUsers());
+            Wishlist savedWishlist = wishListRepository.save(newWishlist);
+            return mapper.map(savedWishlist, WishListVO.class);
+        } catch (Exception e) {
+            System.out.println("Error " + e);
+            return null;
+        }
 
-	@Override
-	public WishListVO updateWishList(BookVO bookVO,Integer idWishList, HttpSession session) {
-		try {
-			WishListVO wishListVO = mapper.map(wishListRepository.findById(idWishList),WishListVO.class);
-			for (BookVO bookVOl : wishListVO.getBook()) {
-				Book book = mapper.map(bookVOl, Book.class);
-				if (bookVOl.getTitle().equals(bookVO.getTitle())
-						&& bookVOl.getIdGoogle().equals(bookVO.getIdGoogle())) {
-					booksRepository.delete(book);
-				} else {
-					bookVOl.setWishListVO(wishListVO);
-					book = mapper.map(bookVOl, Book.class);
-					booksRepository.save(book);
+    }
+
+    @Override
+    public WishListVO updateWishList(BookVO bookVO, Integer idWishList, HttpSession session) {
+        try {
+            WishListVO wishListVO = mapper.map(wishListRepository.findById(idWishList), WishListVO.class);
+            for (BookVO bookVOl : wishListVO.getBook()) {
+                Book book = mapper.map(bookVOl, Book.class);
+                if (bookVOl.getTitle().equals(bookVO.getTitle())
+                        && bookVOl.getIdGoogle().equals(bookVO.getIdGoogle())) {
+                    booksRepository.delete(book);
+                } else {
+                    bookVOl.setWishListVO(wishListVO);
+                    book = mapper.map(bookVOl, Book.class);
+                    booksRepository.save(book);
+                }
+            }
+            return wishListVO = mapper.map(wishListRepository.findById(idWishList), WishListVO.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<WishListVO> findWishlistByIdUser(HttpSession session) {
+        try {
+            List<Wishlist> wishList = wishListRepository.findWishByIdUser((int) session.getAttribute("id"));
+            List<WishListVO> wishListVO = new ArrayList<WishListVO>();
+            wishListVO.add(mapper.map(wishList, WishListVO.class));
+            return wishListVO;
+        } catch (Exception e) {
+            System.out.println("error: " + e);
+            return null;
+        }
+    }
+
+    @Override
+    public boolean deleteWishList(Integer id, HttpSession session) {
+        try {
+            Wishlist wishList = mapper.map(wishListRepository.findById(id), Wishlist.class);
+            if (wishList != null) {
+                List<Book> lstBook = booksRepository.findBooksByWishListId(wishList.getIdWishList());
+                if (lstBook.size() > 0) {
+                    for (Book book : lstBook) {
+                        booksRepository.deleteById(book.getIdBook());
+                    }
+                }
+                wishListRepository.delete(wishList);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    @Transactional
+    public WishListVO addBook(BookVO bookVO, int idWishList, HttpSession session) {
+        // TODO Auto-generated method stub
+        try {
+            Optional<Wishlist> wishlistOptional = wishListRepository.findById(idWishList);
+            if (wishlistOptional.isPresent()) {
+                Wishlist wishlist = wishlistOptional.get();
+
+                if (this.bookAlreadyExistInWishlist(wishlist.getIdWishList(),bookVO)){
+                	return null;
+                	//deberia tirar una excepcion
 				}
-			}
-			return wishListVO = mapper.map(wishListRepository.findById(idWishList),WishListVO.class);
-		} catch (Exception e) {
-			return null;
-		}
-	}
 
-	@Override
-	public List<WishListVO> findWishlistByIdUser(HttpSession session) {
-		try {
-			List<Wishlist> wishList = wishListRepository.findWishByIdUser((int) session.getAttribute("id"));
-			List<WishListVO> wishListVO=new ArrayList<WishListVO>();
-			wishListVO.add(mapper.map(wishList, WishListVO.class));
-			return wishListVO;
-		} catch (Exception e) {
-			System.out.println("error: "+e);
-			return null;
-		}
-	}
+                Book newBook = mapper.map(bookVO, Book.class);
+                newBook.setWishlist(wishlist);
+                Book saved = booksRepository.save(newBook);
 
-	@Override
-	public boolean deleteWishList(Integer id, HttpSession session) {
-		try {
-			Wishlist wishList = mapper.map(wishListRepository.findById(id), Wishlist.class);
-			if (wishList != null) {
-				List<Book> lstBook = booksRepository.findBooksByWishListId(wishList.getIdWishList());
-				if (lstBook.size() > 0) {
-					for (Book book : lstBook) {
-						booksRepository.deleteById(book.getIdBook());
-					}
-				}
-				wishListRepository.delete(wishList);
+                if(wishlist.getBook().isEmpty()){
+                    List<Book> books = List.of(saved);
+                    wishlist.setBook(books);
+                }else{
+                    wishlist.getBook().add(saved);
+                }
+
+                Wishlist wishListUpdated= wishListRepository.save(wishlist);
+
+                return mapper.map(wishListUpdated, WishListVO.class);
+
+            }else{
+                //Excepcion no existe wishlist
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("error: " + e);
+            return null;
+        }
+    }
+
+    private boolean bookAlreadyExistInWishlist(final Integer idWishList, BookVO bookVO){
+		List<Book> books = booksRepository.findBooksByWishListId(idWishList);
+		for (Book book :books) {
+			if (book.getIdGoogle().equals(bookVO.getIdGoogle())){
 				return true;
 			}
-			return false;
-		} catch (Exception e) {
-			return false;
 		}
-	}
-
-	@Override
-	public BookVO addBook(BookVO bookVO, int idWishList, HttpSession session) {
-		// TODO Auto-generated method stub
-		try {
-			WishListVO wishVo=mapper.map(wishListRepository.findById(idWishList), WishListVO.class);
-			if (wishVo != null) {
-				System.out.println("Entra a wishvo");
-				Wishlist wishlist=mapper.map(wishVo, Wishlist.class);
-				System.out.println(idWishList);
-				List<Book> book =booksRepository.findBooksByWishListId(idWishList);
-				Book newBook=mapper.map(bookVO, Book.class);
-				newBook.getWishlist().setIdWishList(idWishList);
-				newBook.setWishlist(wishlist);
-				BookVO bookResult;
-				if(!book.isEmpty()) {
-					System.out.println("no es vacia");
-					for(Book findBook:book) {
-						if(findBook.getIdGoogle()==newBook.getIdGoogle()) {
-							System.out.println("existe");
-							return null;
-						}
-					}
-					System.out.println("inserta");
-					bookResult=mapper.map(booksRepository.save(newBook), BookVO.class);
-						return bookResult;
-				}else {
-					System.out.println("inserta");
-					 	return bookResult=mapper.map(booksRepository.save(newBook), BookVO.class);
-				}
-			}
-			return null;
-		} catch (Exception e) {
-			System.out.println("error: "+e);
-			return null;
-		}
+		return false;
 	}
 
 }

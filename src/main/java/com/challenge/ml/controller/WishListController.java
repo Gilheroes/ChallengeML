@@ -41,11 +41,10 @@ public class WishListController {
      * @param session        User session.
      * @return Wishlist information.
      */
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<?> create(final @RequestBody BookVO bookVO,final  HttpSession session) {
-        System.out.println(bookVO.toString());
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+    ResponseEntity<?> create(final  HttpSession session) {
         if (session != null) {
-            WishListVO wishListVO=wishLisBsn.saveNewWishList(bookVO, session);
+            WishListVO wishListVO=wishLisBsn.saveNewWishList(session);
             return ResponseEntity.status(HttpStatus.CREATED).body(wishListVO);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en la peticion");
@@ -64,13 +63,13 @@ public class WishListController {
      * @param session    User session.
      * @return Wishlist information.
      */
-    @PostMapping(value = "/addBook", produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/addBook", produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<?> addBook(final @RequestBody BookVO bookVO,final  @Param("wishlistId") Integer wishlistId,final  HttpSession session) {
         System.out.println(bookVO.toString());
         if (session != null) {
-        	BookVO book=wishLisBsn.addBook(bookVO, wishlistId, session);
-        	if(book!=null)
-        		return ResponseEntity.status(HttpStatus.CREATED).body(book);
+            WishListVO wishListVO =wishLisBsn.addBook(bookVO, wishlistId, session);
+        	if(wishListVO!=null)
+        		return ResponseEntity.status(HttpStatus.CREATED).body(wishListVO);
         	else
         		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El libro ya existe");
         }
@@ -86,7 +85,7 @@ public class WishListController {
      * @param session User session.
      * @return Wishlist information.
      */
-    @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<?> update(final @RequestBody BookVO bookVO,final @Param("idWishList") Integer idWishList,final  HttpSession session) {
         if (bookVO != null) {
             if (session != null) {
@@ -105,7 +104,7 @@ public class WishListController {
      * @param session User session
      * @return A list of wishlist
      */
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<?> getAll(final HttpSession session) {
         if (session != null) {
             List<WishListVO> wishListVO = wishLisBsn.findWishlistByIdUser(session);

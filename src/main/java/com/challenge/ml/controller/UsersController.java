@@ -37,7 +37,7 @@ public class UsersController {
      * @param newUser Object with user information.
      * @return User information or error message.
      */
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<?> create(final @Valid @RequestBody UsersVO newUser) {
         try {
             if (enrolamientoBsn.validateUser(newUser)) {
