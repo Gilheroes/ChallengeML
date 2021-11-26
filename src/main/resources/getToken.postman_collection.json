@@ -1,0 +1,291 @@
+{
+	"info": {
+		"_postman_id": "bfee34b3-4a83-442b-8ae7-1151f8d41464",
+		"name": "getToken",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/users",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_name\":\"gil\",\r\n    \"password\":\"1234\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/findBooks",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJqd3RDaGFsbGVuZ2UiLCJzdWIiOiJnaWwiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjM3ODA3MDY4LCJleHAiOjE2Mzc4MDc2Njh9.GEQLYAKdgohRSgm7HuEqA94uCemR4_9No2Yebi_nv3Wd-u-lmj9pS9Uqt8QT2pV9r4g7vvF_GCsdYgxjMFnY4Q",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Harry Potter\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/google/books",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"google",
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/users/login/token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_name\":\"gil\",\r\n    \"password\":\"1234\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/users/login/token",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"login",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/wishlist",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/wishlist",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wishlist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/wishlist/addBook?wishlistId=7",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJqd3RDaGFsbGVuZ2UiLCJzdWIiOiJnaWwiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjM3ODY3NTQ1LCJleHAiOjE2Mzc4NjgxNDV9.R6eYNrPbm_SfBM3nsSuztM8RWu7mEAp-iKfesp1EtPWOm_nVo4Nn54Erg8fLmhwsW30DF1Zw4jL7lO644rrfmA",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idGoogle\":\"uBKvtAEACAAJ\",\r\n    \"title\":\"Harry Potter y el legado maldito (Harry Potter)\",\r\n    \"publisher\": \"Salamandra\",\r\n    \"author\": \"J. K. Rowling\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/wishlist/addBook?wishlistId=23",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wishlist",
+						"addBook"
+					],
+					"query": [
+						{
+							"key": "wishlistId",
+							"value": "23"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/wishlist",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJqd3RDaGFsbGVuZ2UiLCJzdWIiOiJnaWwiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjM3ODY4NDk4LCJleHAiOjE2Mzc4NjkwOTh9.Ukh77U0JNq1YJVgF3oJIO9VIzyecI4Wt2P9CtHG_3EjIjU7m7oOww2VUAPF8xk3wT8rL8QvW5mjLgrjXLguk9g",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/wishlist",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wishlist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/wishlist/",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJqd3RDaGFsbGVuZ2UiLCJzdWIiOiJnaWwiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjM3ODY4NDk4LCJleHAiOjE2Mzc4NjkwOTh9.Ukh77U0JNq1YJVgF3oJIO9VIzyecI4Wt2P9CtHG_3EjIjU7m7oOww2VUAPF8xk3wT8rL8QvW5mjLgrjXLguk9g",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/wishlist/23",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wishlist",
+						"23"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "23",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/wishlist?idWishList=23",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJqd3RDaGFsbGVuZ2UiLCJzdWIiOiJnaWwiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjM3ODY3NTQ1LCJleHAiOjE2Mzc4NjgxNDV9.R6eYNrPbm_SfBM3nsSuztM8RWu7mEAp-iKfesp1EtPWOm_nVo4Nn54Erg8fLmhwsW30DF1Zw4jL7lO644rrfmA",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"idBook\": 1,\r\n            \"idGoogle\": \"2zgRDXFWkm8C1\",\r\n            \"author\": \"J. K. Rowling\",\r\n            \"title\": \"HARRY POTTER Y LA CAMARA SECRETA\",\r\n            \"publisher\": \"Salamandra\"\r\n        }"
+				},
+				"url": {
+					"raw": "localhost:8080/wishlist?idWishList=23",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"wishlist"
+					],
+					"query": [
+						{
+							"key": "idWishList",
+							"value": "23"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

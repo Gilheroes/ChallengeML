@@ -11,7 +11,7 @@ _Estas instrucciones te permitirán obtener una copia del proyecto en funcionami
 * Realizar clonado del proyecto
 
 ```
-$ git clone https://github.com/libgit2/libgit2
+$ git clone https://github.com/Gilheroes/ChallengeMercadoLibre.git
 ```
 
 ### Pre-requisitos 📋
@@ -88,7 +88,7 @@ _Debera cambiar el puerto en las peticiones para las pruebas_
 
 _Realizar peticiones_
 
-Aqui pon tus peticiones **GIL**!!!!!!!!!
+Se agrega coleccion de peticiones json en /src/main/resources/getToken.postman_collection.json
 
 
 ## Construido con 🛠️

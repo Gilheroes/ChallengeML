@@ -43,7 +43,7 @@ public class WishListBsnImpl implements WishLisBsn {
             return mapper.map(savedWishlist, WishListVO.class);
         } catch (Exception e) {
             System.out.println("Error " + e);
-            throw new NotFoundException("No existe wishlist con ese identificador.");
+            throw new NotFoundException("No se pudo generar la lista.");
         }
 
     }
@@ -68,9 +68,9 @@ public class WishListBsnImpl implements WishLisBsn {
 	            }
 		            return result;
             }
-            throw new NotFoundException("No existe wishlist con ese identificador.");
+            throw new NotFoundException("No se actualizo.");
         } catch (Exception e) {
-            throw new NotFoundException("No existe wishlist con ese identificador.");
+            throw new NotFoundException("No se actualizo.");
         }
     }
 
@@ -112,7 +112,7 @@ public class WishListBsnImpl implements WishLisBsn {
             }
             return false;
         } catch (Exception e) {
-            throw new NotFoundException("No existe wishlist con ese identificador.");
+            throw new NotFoundException("No se pudo borrar.");
         }
     }
 
@@ -145,7 +145,7 @@ public class WishListBsnImpl implements WishLisBsn {
             return mapper.map(wishListUpdated, WishListVO.class);
 
         } else {
-            throw new NotFoundException("No existe wishlist con ese identificador.");
+            throw new NotFoundException("No se pudo guardar.");
         }
     }
 
