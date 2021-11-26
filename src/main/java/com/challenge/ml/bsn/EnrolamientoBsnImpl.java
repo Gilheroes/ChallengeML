@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpSession;
 
+import com.challenge.ml.exception.InvalidDataException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,14 +52,10 @@ public class EnrolamientoBsnImpl implements EnrolamientoBsn {
     }
 
     @Override
-    public UsersVO saveNewUser(UsersVO newUser) throws NotFoundException {
-    	try {
+    public UsersVO saveNewUser(UsersVO newUser) throws InvalidDataException {
+        this.validateRequestInformation(newUser);
         Users users = mapper.map(newUser, Users.class);
-        UsersVO result = mapper.map(usersRepository.save(users), UsersVO.class);
-        return result;
-    	} catch (Exception e) {
-            throw new NotFoundException("No existe wishlist con ese identificador.");
-        }
+        return mapper.map(usersRepository.save(users), UsersVO.class);
     }
 
     @Override
@@ -77,17 +74,29 @@ public class EnrolamientoBsnImpl implements EnrolamientoBsn {
     }
 
     @Override
-    public UsersVO findByUserAndPwd(UsersVO usersVO, HttpSession httpSession) throws NotFoundException {
-        try {
-            Users users = mapper.map(usersVO, Users.class);
-            users = usersRepository.findByUserAndPwd(usersVO.getUser_name(), usersVO.getPassword());
-            usersVO = mapper.map(users, UsersVO.class);
-            httpSession.setAttribute("id", users.getIdUsers());
-            return usersVO;
-        } catch (Exception e) {
-            throw new NotFoundException("No existe wishlist con ese identificador.");
+    public UsersVO findByUserAndPwd(UsersVO usersVO, HttpSession httpSession) throws NotFoundException, InvalidDataException {
+
+        this.validateRequestInformation(usersVO);
+        Users users = usersRepository.findByUserAndPwd(usersVO.getUser_name(), usersVO.getPassword());
+        if (null == users) {
+            throw new NotFoundException("No existe un usuario con los datos proporcionados.");
         }
+        usersVO = mapper.map(users, UsersVO.class);
+        httpSession.setAttribute("id", users.getIdUsers());
+        return usersVO;
     }
 
+
+    /**
+     * Method to validate request information.
+     *
+     * @param usersVO Object with request information.
+     * @throws InvalidDataException If the object don't have the required data.
+     */
+    private void validateRequestInformation(final UsersVO usersVO) throws InvalidDataException {
+        if (null == usersVO.getUser_name() || null == usersVO.getPassword()) {
+            throw new InvalidDataException("Los datos de usuario y contraseña son requeridos");
+        }
+    }
 
 }

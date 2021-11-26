@@ -33,13 +33,10 @@ public class WishListController {
     @Autowired
     WishLisBsn wishLisBsn;
 
-
     /**
      * Create new wishlist.
      *
-     * @param bookVO         Book information.
-     * @param nameOfWishList Wishlist name.
-     * @param session        User session.
+     * @param session User session.
      * @return Wishlist information.
      */
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -49,15 +46,9 @@ public class WishListController {
                 WishListVO wishListVO = wishLisBsn.saveNewWishList(session);
                 return ResponseEntity.status(HttpStatus.CREATED).body(wishListVO);
             }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en la peticion");
-        } catch (InvalidDataException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        } catch (NotFoundException ex) {
-            log.error(ex.getMessage());
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error en la petición");
         } catch (Exception e) {
-            log.error("Failed to creaye wishlist, Error: " + e.getMessage());
+            log.error("Failed to create wishlist, Error: " + e.getMessage());
             return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -73,7 +64,6 @@ public class WishListController {
     @PostMapping(value = "/addBook", produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<?> addBook(final @RequestBody BookVO bookVO, final @Param("wishlistId") Integer wishlistId, final HttpSession session) {
         try {
-            System.out.println(bookVO.toString());
             if (session != null) {
                 WishListVO wishListVO = wishLisBsn.addBook(bookVO, wishlistId, session);
                 return ResponseEntity.status(HttpStatus.CREATED).body(wishListVO);
@@ -110,9 +100,6 @@ public class WishListController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
             }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error no se guardo la lista");
-        } catch (InvalidDataException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         } catch (NotFoundException ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
@@ -131,24 +118,24 @@ public class WishListController {
      */
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<?> getAll(final HttpSession session) {
-    	try {
-	        if (session != null) {
-	            List<WishListVO> wishListVO = wishLisBsn.findWishlistByIdUser(session);
-	            if (wishListVO.isEmpty())
-	                return ResponseEntity.status(HttpStatus.OK).body(wishListVO);
-	            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No existen listas disponibles");
-	        }
-	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
-    	 } catch (InvalidDataException e) {
-             log.error(e.getMessage());
-             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-         } catch (NotFoundException ex) {
-             log.error(ex.getMessage());
-             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-         } catch (Exception e) {
-             log.error("Failed to get wishlist, Error: " + e.getMessage());
-             return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
-         }
+        try {
+            if (session != null) {
+                List<WishListVO> wishListVO = wishLisBsn.findWishlistByIdUser(session);
+                if (wishListVO.isEmpty())
+                    return ResponseEntity.status(HttpStatus.OK).body(wishListVO);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No existen listas disponibles");
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La session expiro");
+        } catch (InvalidDataException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (NotFoundException ex) {
+            log.error(ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            log.error("Failed to get wishlist, Error: " + e.getMessage());
+            return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
@@ -169,9 +156,6 @@ public class WishListController {
                 return new ResponseEntity<>("The wishlist could not be removed.", HttpStatus.BAD_REQUEST);
             }
 
-        } catch (InvalidDataException e) {
-            log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT); 
         } catch (NotFoundException ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);

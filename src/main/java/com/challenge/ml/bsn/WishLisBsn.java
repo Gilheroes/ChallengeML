@@ -10,14 +10,14 @@ import com.challenge.ml.exception.InvalidDataException;
 import com.challenge.ml.exception.NotFoundException;
 
 public interface WishLisBsn {
+
     /**
-     * Create wishlist.
+     * Create a wishlist.
      *
-     * @param bookVO         Book information.
-     * @param idWishList 	 Wishlist identifier.
-     * @param session        User session.
+     * @param session User session.
+     * @return Wishlist information.
      */
-	WishListVO saveNewWishList(HttpSession session)throws InvalidDataException, NotFoundException;
+    WishListVO saveNewWishList(HttpSession session);
 
     /**
      * Update wishlist.
@@ -26,7 +26,7 @@ public interface WishLisBsn {
      * @param session User session.
      * @return Wishlist information.
      */
-    WishListVO updateWishList(final BookVO bookVO,final Integer idWishList, final HttpSession session)throws InvalidDataException, NotFoundException;
+    WishListVO updateWishList(final BookVO bookVO, final Integer idWishList, final HttpSession session) throws NotFoundException;
 
     /**
      * Get wishlist by user id.
@@ -34,7 +34,7 @@ public interface WishLisBsn {
      * @param session User session.
      * @return Wishlist information.
      */
-    List<WishListVO> findWishlistByIdUser(final HttpSession session)throws InvalidDataException, NotFoundException;
+    List<WishListVO> findWishlistByIdUser(final HttpSession session) throws InvalidDataException, NotFoundException;
 
     /**
      * Delete wishlist information.
@@ -43,14 +43,14 @@ public interface WishLisBsn {
      * @param session User session.
      * @return True if the wishlist was deleted, otherwise false.
      */
-    boolean deleteWishList(final Integer id, final HttpSession session)throws InvalidDataException, NotFoundException;
-    
+    boolean deleteWishList(final Integer id, final HttpSession session) throws NotFoundException;
+
     /**
      * Create Book.
      *
-     * @param bookVO         Book information.
-     * @param idWishList     Wishlist identifier.
-     * @param session        User session.
+     * @param bookVO     Book information.
+     * @param idWishList Wishlist identifier.
+     * @param session    User session.
      */
     WishListVO addBook(final BookVO bookVO, final int idWishList, HttpSession session) throws InvalidDataException, NotFoundException;
 

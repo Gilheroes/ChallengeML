@@ -33,94 +33,73 @@ public class WishListBsnImpl implements WishLisBsn {
     private ModelMapper mapper;
 
     @Override
-    public WishListVO saveNewWishList(HttpSession session) throws NotFoundException {
+    public WishListVO saveNewWishList(HttpSession session) {
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        try {
-            Users users = usersRepository.getById((int) session.getAttribute("id"));
-            Wishlist newWishlist = new Wishlist();
-            newWishlist.setIdUser(users.getIdUsers());
-            Wishlist savedWishlist = wishListRepository.save(newWishlist);
-            return mapper.map(savedWishlist, WishListVO.class);
-        } catch (Exception e) {
-            System.out.println("Error " + e);
-            throw new NotFoundException("No se pudo generar la lista.");
-        }
-
+        Users users = usersRepository.getById((int) session.getAttribute("id"));
+        Wishlist newWishlist = new Wishlist();
+        newWishlist.setIdUser(users.getIdUsers());
+        Wishlist savedWishlist = wishListRepository.save(newWishlist);
+        return mapper.map(savedWishlist, WishListVO.class);
     }
 
     @Override
     public WishListVO updateWishList(BookVO bookVO, Integer idWishList, HttpSession session) throws NotFoundException {
-        try {
-            Optional<Wishlist> wishListOptional =wishListRepository.findById(idWishList);
-            if (wishListOptional.isPresent()) {
-	                Wishlist wishlist = wishListOptional.get();
-	                WishListVO result=new WishListVO();
-		            for (Book book : wishlist.getBook()) {
-		                if (book.getIdBook()==bookVO.getIdBook()) {
-		                	book=booksRepository.getOne(book.getIdBook());
-		                	book.setAuthor(bookVO.getAuthor());
-		                	book.setIdGoogle(bookVO.getIdGoogle());
-		                	book.setTitle(bookVO.getTitle());
-		                	book.setPublisher(bookVO.getPublisher());
-		                	book=booksRepository.save(book);
-		                	result.getBook().add(mapper.map(book, BookVO.class));
-		                }
-	            }
-		            return result;
+
+        Optional<Wishlist> wishListOptional = wishListRepository.findById(idWishList);
+        if (wishListOptional.isPresent()) {
+            Wishlist wishlist = wishListOptional.get();
+            WishListVO result = new WishListVO();
+            for (Book book : wishlist.getBook()) {
+                if (book.getIdBook() == bookVO.getIdBook()) {
+                    book = booksRepository.getById(book.getIdBook());
+                    book.setAuthor(bookVO.getAuthor());
+                    book.setIdGoogle(bookVO.getIdGoogle());
+                    book.setTitle(bookVO.getTitle());
+                    book.setPublisher(bookVO.getPublisher());
+                    book = booksRepository.save(book);
+                    result.getBook().add(mapper.map(book, BookVO.class));
+                }
             }
-            throw new NotFoundException("No se actualizo.");
-        } catch (Exception e) {
-            throw new NotFoundException("No se actualizo.");
+            return result;
         }
+        throw new NotFoundException("No existe wishlist con ese identificador.");
     }
 
     @Override
     public List<WishListVO> findWishlistByIdUser(HttpSession session) throws NotFoundException {
-        try {
-        	List<Wishlist> wishlist=wishListRepository.findWishByIdUser((int) session.getAttribute("id"));
-        	List<WishListVO> listVO=new ArrayList<WishListVO>();
-        	if(!wishlist.isEmpty()) {
-        		WishListVO wishListVO=new WishListVO();
-        		for(Wishlist result:wishlist) {
-        			wishListVO=mapper.map(result, WishListVO.class);
-        			System.out.println(wishListVO);
-        			listVO.add(wishListVO);
-        		}
-	        		return listVO;
-        	}
-            throw new NotFoundException("No existe wishlist con ese identificador.");
-        } catch (Exception e) {
-            System.out.println("error: " + e);
-            throw new NotFoundException("No existe wishlist con ese identificador.");
+        List<Wishlist> wishlist = wishListRepository.findWishByIdUser((int) session.getAttribute("id"));
+        List<WishListVO> listVO = new ArrayList<>();
+        if (!wishlist.isEmpty()) {
+            WishListVO wishListVO = new WishListVO();
+            for (Wishlist result : wishlist) {
+                wishListVO = mapper.map(result, WishListVO.class);
+                listVO.add(wishListVO);
+            }
+            return listVO;
         }
+        throw new NotFoundException("No existe wishlist con ese identificador.");
     }
 
     @Override
     public boolean deleteWishList(Integer id, HttpSession session) throws NotFoundException {
-        try {
-            Optional<Wishlist> wishListOptional =wishListRepository.findById(id);
-            if (wishListOptional.isPresent()) {
-            	Wishlist wishlist = wishListOptional.get();
-                List<Book> lstBook = booksRepository.findBooksByWishListId(wishlist.getIdWishList());
-                if (lstBook.size() > 0) {
-                    for (Book book : lstBook) {
-                        booksRepository.deleteById(book.getIdBook());
-                    }
+        Optional<Wishlist> wishListOptional = wishListRepository.findById(id);
+        if (wishListOptional.isPresent()) {
+            Wishlist wishlist = wishListOptional.get();
+            List<Book> lstBook = booksRepository.findBooksByWishListId(wishlist.getIdWishList());
+            if (lstBook.size() > 0) {
+                for (Book book : lstBook) {
+                    booksRepository.deleteById(book.getIdBook());
                 }
-                wishListRepository.delete(wishlist);
-                return true;
             }
-            return false;
-        } catch (Exception e) {
-            throw new NotFoundException("No se pudo borrar.");
+            wishListRepository.delete(wishlist);
+            return true;
         }
+        throw new NotFoundException("No existe una lista con ese identificador");
     }
 
     @Override
     @Transactional
     public WishListVO addBook(BookVO bookVO, int idWishList, HttpSession session) throws InvalidDataException, NotFoundException {
-        // TODO Auto-generated method stub
-
         Optional<Wishlist> wishlistOptional = wishListRepository.findById(idWishList);
         if (wishlistOptional.isPresent()) {
             Wishlist wishlist = wishlistOptional.get();
@@ -145,7 +124,7 @@ public class WishListBsnImpl implements WishLisBsn {
             return mapper.map(wishListUpdated, WishListVO.class);
 
         } else {
-            throw new NotFoundException("No se pudo guardar.");
+            throw new NotFoundException("No existe wishlist con el identificador proporcionado.");
         }
     }
 

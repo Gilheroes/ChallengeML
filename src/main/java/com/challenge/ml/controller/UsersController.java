@@ -50,9 +50,6 @@ public class UsersController {
         } catch (InvalidDataException e) {
             log.error(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        } catch (NotFoundException ex) {
-            log.error(ex.getMessage());
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             log.error("Failed to create user, Error: " + e.getMessage());
             return new ResponseEntity<>("Favor de consultar a su administrador", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -67,7 +64,7 @@ public class UsersController {
      * @return Token authorization or error message.
      */
     @PostMapping("/login/token")
-    public ResponseEntity<?> loginToken(final @RequestBody UsersVO usersVO,final  HttpSession httpSession) {
+    public ResponseEntity<?> loginToken(final @RequestBody UsersVO usersVO, final HttpSession httpSession) {
         try {
             if (enrolamientoBsn.findByUserAndPwd(usersVO, httpSession) != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(enrolamientoBsn.getJWTToken(usersVO.getUser_name()));

@@ -28,8 +28,8 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping(value = "/google/books")
 public class GoogleBooksController {
-	@Autowired
-	GoogleBooksBsn googleBooksBsn;
+    @Autowired
+    GoogleBooksBsn googleBooksBsn;
 
     /**
      * Google url in properties.
@@ -46,13 +46,16 @@ public class GoogleBooksController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     ResponseEntity<Wrapper> getBooks(final @RequestBody GoogleBooksVO googleBooksVO) {
         RestTemplate restTemplate = new RestTemplate();
-        if(googleBooksVO.getTitle().trim()!=null) {
-            ResponseEntity<Wrapper> response = restTemplate.getForEntity(url +googleBooksBsn.createRequest(googleBooksVO), Wrapper.class);
-        if (response.getStatusCode().value() == 200) 
-            return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
-         else 
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-    }
+        if (!googleBooksVO.getTitle().trim().equals("")) {
+            ResponseEntity<Wrapper> response = restTemplate.getForEntity(url + googleBooksBsn.createRequest(googleBooksVO), Wrapper.class);
+            if (response.getStatusCode().value() == 200) {
+                log.info("Success response from google service");
+                return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
+            }else{
+                log.error("Error in service consult, Code response: "+ response.getStatusCode().value());
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        }
         return new ResponseEntity<>(HttpStatus.CONFLICT);
-}
+    }
 }

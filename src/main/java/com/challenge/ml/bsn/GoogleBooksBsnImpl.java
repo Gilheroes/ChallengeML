@@ -12,9 +12,9 @@ public class GoogleBooksBsnImpl implements GoogleBooksBsn {
 		StringBuilder request= new StringBuilder();
 		request.append(googleBooksVO.getTitle());
 		if(googleBooksVO.getAuthors()!=null) {
-			request.append("+inauthor:"+googleBooksVO.getAuthors());
+			request.append("+inauthor:").append(String.join(",", googleBooksVO.getAuthors()));
 		}if(googleBooksVO.getPublisher()!=null) {
-			request.append("+inpublisher:"+googleBooksVO.getPublisher());
+			request.append("+inpublisher:").append(googleBooksVO.getPublisher());
 		}
 		
 		return request;

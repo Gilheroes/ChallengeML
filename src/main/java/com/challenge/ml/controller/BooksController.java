@@ -32,7 +32,7 @@ public class BooksController {
     private BookBsn bookBsn;
 
     @GetMapping(value = "/getByWishlistId", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> getByWishlistId(final @RequestParam Integer wishlistId,final  HttpSession session) {
+    public ResponseEntity<?> getByWishlistId(final @RequestParam Integer wishlistId, final HttpSession session) {
         if (session != null) {
             List<BookVO> bookVO = bookBsn.getBooksOfWishListById(wishlistId, session);
             if (bookVO.isEmpty()) {
