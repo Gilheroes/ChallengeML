@@ -1,6 +1,6 @@
-# Título del Proyecto
+# Google book wishlist
 
-_Acá va un párrafo que describa lo que es el proyecto_
+_Proyecto enfocado en la creacon de lista de libros provenientes de un API expuesta por google._
 
 ## Comenzando 🚀
 
@@ -17,11 +17,12 @@ $ git clone https://github.com/libgit2/libgit2
 ### Pre-requisitos 📋
 
 * Docker
+* Docker-Compose
 * maven
 
 ### Instalación 🔧
 
-Es necesario generar la imagen con el archivo Dockerfile existente en el proyecto
+El unico requisiro es ejecutar el archivo docker-compose.yml, para lo cual son necesarios los siguientes pasos:
 
 _Situarce en el directorio del proyecto_
 
@@ -29,32 +30,59 @@ _Situarce en el directorio del proyecto_
  cd ~/Documents/prueba/Challeng 
 ```
 
-_Ejecutar creacion de imagen_
+_Ejecutar el siguiente comando:_
 
 ```
- sudo docker build -t spring-boot:1.0 .
+ sudo docker-compose up -d
 ```
 
-_Confirmacion de imagen creada_
+Donde: 
 
-```
-sudo  docker images
-```
+* -d -> Es utilizado para realizar la ejecución en background
 
-_Se debe ver la informacion de la imagen_
 
-```
-REPOSITORY    TAG       IMAGE ID       CREATED          SIZE
-spring-boot   1.0       328998a956ce   19 minutes ago   216MB
-```
+_*Notas:*_
 
-_Ejecutar contenedor_
-
+* Si desea ejecutar el contenedor en primera estancia remover -d, para salir de la ejecucion utilizar ctrl+c.
+* Si se desean ver los logs del contenedor utilice la siguiente instrucción (Para finalizar la ejecución seria ctrl+c):
 ```
-sudo docker run -d -p 8080:8080 -t spring-boot:1.0
+sudo docker-compose logs -f
 ```
 
-_Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo_
+## Explicación docker-compose 📦
+
+_La estructura del archivo docker-compose.yml es la siguiente_
+
+```
+version: '3.3'
+services:
+    project-app:
+      build: ./
+      image: spring-boot:1.0
+      restart: always
+      container_name: project-app
+      ports:
+        - 8080:8080
+      volumes: 
+        - /var/run/docker.sock:/var/run/docker.sock
+      network_mode: bridge
+```
+
+Donde:
+
+* **project-app** - Es el nombre que le asignamos a nuestro servicio.
+* **build** - Indica la ubicacion del archivo Dockerfile desde donde se creara la imagen.
+* **container_name** - Es el nombre que le asignamos a nuestro contenedor.
+* **ports** - Los puertos que seran utilizados interna y externamente
+
+_Nota:_ Si su puerto 8080 se encuentra ocupado usted puede modificar el puerto externo para que el servicio de levante en otro puerto sin afectar su funcionalidad. Ejemplo:
+
+```
+ports:
+- 8081:8080
+```
+
+_Debera cambiar el puerto en las peticiones para las pruebas_
 
 ## Ejecutando las pruebas ⚙️
 
