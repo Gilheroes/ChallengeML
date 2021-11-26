@@ -11,7 +11,7 @@ _Estas instrucciones te permitirán obtener una copia del proyecto en funcionami
 * Realizar clonado del proyecto
 
 ```
-$ git clone https://github.com/Gilheroes/ChallengeMercadoLibre.git
+$ git clone https://github.com/Gilheroes/ChallengeML.git
 ```
 
 ### Pre-requisitos 📋
@@ -95,9 +95,9 @@ Se agrega coleccion de peticiones json en /src/main/resources/getToken.postman_c
 
 _Menciona las herramientas que utilizaste para crear tu proyecto_
 
-* [Spring-boot](http://www.dropwizard.io/1.0.2/docs/) - El framework web usado
+* [Spring-boot](https://spring.io/projects/spring-boot) - El framework web usado
 * [Maven](https://maven.apache.org/) - Manejador de dependencias
-* [SQL_LITE](https://rometools.github.io/rome/) - Base de datos
+* [SQL_LITE](https://www.sqlite.org/docs.html) - Base de datos
 
 
 ## Autores ✒️
