@@ -11,8 +11,24 @@
     <groupId>com.challenge.ml</groupId>
     <artifactId>snap</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
-    <description>Demo project for Spring Boot</description>
+
+
+    <name>challenge</name>
+    <description>Project for create wishlists.</description>
+
+    <organization>
+        <name>GIL Technology</name>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>gilberto.tapia</id>
+            <name>Gilberto tapia</name>
+            <email>gilbertoheroes@hotmail.com</email>
+        </developer>
+    </developers>
+
+
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -105,11 +121,11 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
         <dependency>
-  <groupId>org.assertj</groupId>
-  <artifactId>assertj-core</artifactId>
-  <!-- use 2.9.1 for Java 7 projects -->
-  <scope>test</scope>
-</dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <!-- use 2.9.1 for Java 7 projects -->
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
