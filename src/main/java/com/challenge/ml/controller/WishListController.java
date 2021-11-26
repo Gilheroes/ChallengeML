@@ -171,7 +171,7 @@ public class WishListController {
 
         } catch (InvalidDataException e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT); 
         } catch (NotFoundException ex) {
             log.error(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
